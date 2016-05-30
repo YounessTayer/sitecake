@@ -249,10 +249,10 @@
 			<equals arg1="${os.name}" arg2="Linux"/>
 			<then>
 				<resolvepath propertyName="build.dir.absolute" file="${build.dir}"/>
-				<exec command="zip -r ${build.dir.absolute}/sitecake-${version}-whitelabel.zip sitecake sitecake.php" dir="${package.dir}"/>
+				<exec command="zip -r ${build.dir.absolute}/sitecake-${version}.zip sitecake sitecake.php" dir="${package.dir}"/>
 			</then>
 			<else>
-				<zip destfile="${build.dir}/sitecake-${version}-whitelabel.zip"
+				<zip destfile="${build.dir}/sitecake-${version}.zip"
 					 basedir="${package.dir}">
 					<fileset dir="${package.dir}">
 						<include name="sitecake/**" />
