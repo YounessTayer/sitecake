@@ -1,0 +1,15 @@
+.classpath
+.project
+.settings
+target
+.gitignore
+.buildpath
+.idea
+vendor
+build
+tmp
+composer.lock
+phar-test
+
+tests/_output/*
+/client

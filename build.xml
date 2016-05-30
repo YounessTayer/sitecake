@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="SiteCake" default="build" basedir="." description="SiteCake CMS">
+	<property name="version" value="2.3.1"/>
+	<property name="scedit.version" value="2.3.1"/>
+
+	<property name="build.dir" value="./build"/>
+	<property name="package.dir" value="${build.dir}/target"/>
+
+	<property name="scedit.package.dir" value="../scedit2-whitelabel/sitecake-editor-client/target"/>
+	<property name="scedit.package.dist" value="../scedit2-whitelabel/sitecake-editor-client/target/sitecake-editor-client-${scedit.version}-dist.tar.gz"/>
+
+	<target name="clean-deps">
+		<if>
+			<available file="./vendor"/>
+			<then>
+				<delete dir="./vendor" failonerror="true" includeemptydirs="true"/>
+			</then>
+		</if>
+		<if>
+			<available file="./composer.lock"/>
+			<then>
+				<delete file="./composer.lock"/>
+			</then>
+		</if>
+	</target>
+
+	<target name="clean-build">
+		<if>
+			<available file="${build.dir}"/>
+			<then>
+				<delete dir="${build.dir}" failonerror="true" includeemptydirs="true"/>
+			</then>
+		</if>
+	</target>
+
+	<target name="clean" depends="clean-deps, clean-build">
+		<echo msg="clean"/>
+	</target>
+
+	<target name="deps">
+		<if>
+			<available file="./composer.lock"/>
+			<then>
+				<exec command="composer update" checkreturn="true" passthru="true"/>
+			</then>
+			<else>
+				<exec command="composer install" checkreturn="true" passthru="true"/>
+			</else>
+		</if>
+	</target>
+
+	<target name="verify">
+		<phplint>
+			<fileset dir="src">
+				<include name="**/*.php"/>
+			</fileset>
+		</phplint>
+	</target>
+
+	<target name="test" depends="verify">
+		<mkdir dir="./tests/test-site"/>
+
+		<autoloader autoloaderpath="vendor/autoload.php"/>
+		<phpunit codecoverage="false" haltonfailure="true" haltonerror="true">
+			<formatter type="plain" usefile="false"/>
+			<batchtest>
+				<fileset dir="tests">
+					<include name="**/*Test.php"/>
+				</fileset>
+			</batchtest>
+		</phpunit>
+
+		<delete dir="./tests/test-site" includeemptydirs="true"/>
+	</target>
+
+	<target name="fetch-scedit">
+		<if>
+			<and>
+				<equals arg1="${os.name}" arg2="Linux"/>
+				<available file="${scedit.package.dist}" />
+			</and>
+			<then>
+				<exec command="basename ${scedit.package.dist}" outputProperty="scedit.package.file"/>
+
+				<copy file="${scedit.package.dist}" todir="${package.dir}/sitecake/${version}/client"/>
+				<echo msg="Extracting scedit package ${scedit.package.file} to ${package.dir}/sitecake/${version}/client"/>
+				<exec command="tar xzf ${scedit.package.file}" dir="${package.dir}/sitecake/${version}/client"
+					  checkreturn="true" passthru="true"/>
+				<delete file="${package.dir}/sitecake/${version}/client/${scedit.package.file}"/>
+			</then>
+			<elseif>
+				<available file="${scedit.package.dir}" type="dir"/>
+				<then>
+					<echo msg="Bundling scedit from package directory (${scedit.package.dir})..."/>
+					<mkdir dir="${package.dir}/sitecake/${version}/client"/>
+					<copy todir="${package.dir}/sitecake/${version}/client">
+						<fileset dir="${scedit.package.dir}">
+							<include name="**"/>
+						</fileset>
+					</copy>
+				</then>
+			</elseif>
+			<else>
+				<echo msg="scedit package archive / directory were not found. Continuing without scedit bundling..."/>
+			</else>
+		</if>
+	</target>
+
+	<target name="package">
+
+		<!-- Check should cleanup be performed -->
+		<if>
+			<and>
+				<isset property="build.type"/>
+				<equals arg1="${build.type}" arg2="interactive"/>
+				<available file="${package.dir}"/>
+			</and>
+			<then>
+				<propertyprompt propertyName="build.clean" defaultValue="y" promptText="Destination dir already exists. Do you want to remove it before build?" promptCharacter=":"/>
+				<if>
+					<equals arg1="${build.clean}" arg2="y" />
+					<then>
+						<phingcall target="clean-build"/>
+					</then>
+				</if>
+			</then>
+		</if>
+
+		<!-- Create directories -->
+		<mkdir dir="${package.dir}/sitecake/${version}/config"/>
+		<mkdir dir="${package.dir}/sitecake/${version}/src"/>
+
+		<!-- Create sitecake.php file -->
+		<touch file="${package.dir}/sitecake.php"/>
+		<echo msg="&lt;?php require 'sitecake/${version}/src/app.php';" file="${package.dir}/sitecake.php" append="false" />
+
+		<!-- Copy config files -->
+		<copy file="./config/bootstrap.php" todir="${package.dir}/sitecake/${version}/config">
+			<filterchain>
+				<expandproperties/>
+			</filterchain>
+		</copy>
+		<copy file="./config/check.php" todir="${package.dir}/sitecake/${version}/config">
+			<filterchain>
+				<expandproperties/>
+			</filterchain>
+		</copy>
+		<copy file="./config/config.php" todir="${package.dir}/sitecake/${version}/config"/>
+
+		<!-- Copy credentials and editor config files -->
+		<copy file="./config/credentials.php" todir="${package.dir}/sitecake"/>
+		<copy file="./config/credentials.php.default" todir="${package.dir}/sitecake"/>
+		<copy file="./config/editor.cnf" todir="${package.dir}/sitecake"/>
+
+		<!-- Fetching editor -->
+		<if>
+			<and>
+				<isset property="build.type"/>
+				<equals arg1="${build.type}" arg2="interactive"/>
+			</and>
+			<then>
+				<phingcall target="fetch-scedit-int"/>
+			</then>
+			<else>
+				<phingcall target="fetch-scedit"/>
+			</else>
+		</if>
+
+		<!-- Copy src directory -->
+		<copy todir="${package.dir}/sitecake/${version}/src">
+			<fileset dir="./src">
+				<include name="**/*.php"/>
+				<exclude name="resources/*"/>
+				<exclude name="app.php"/>
+			</fileset>
+			<filterchain>
+				<expandproperties/>
+			</filterchain>
+		</copy>
+		<copy file="./src/app.php" tofile="${package.dir}/sitecake/${version}/src/app.php">
+			<filterchain>
+				<expandproperties/>
+			</filterchain>
+		</copy>
+
+		<!-- Copy locale directory -->
+		<copy todir="${package.dir}/sitecake/${version}/locale">
+			<fileset dir="./src/resources/locale">
+				<include name="*.*"/>
+			</fileset>
+			<filterchain>
+				<expandproperties/>
+			</filterchain>
+		</copy>
+
+		<!-- Copy composer.json and run composer install -->
+		<copy file="composer.json" todir="${package.dir}/sitecake/${version}"/>
+		<exec command="composer --prefer-dist --no-dev install"
+			  dir="${package.dir}/sitecake/${version}"
+			  checkreturn="true" passthru="true"/>
+		<delete file="${package.dir}/sitecake/${version}/composer.lock"/>
+		<delete file="${package.dir}/sitecake/${version}/composer.json"/>
+
+		<!-- Trim down vendor dir -->
+		<delete includeemptydirs="true">
+			<fileset dir="${package.dir}/sitecake/${version}/vendor">
+				<include name="*/"/>
+				<exclude name="composer/"/>
+				<exclude name="electrolinux/phpquery/phpQuery/"/>
+				<exclude name="gajus/dindent/src/"/>
+				<exclude name="jdesrosiers/silex-cors-provider/"/>
+				<exclude name="league/flysystem/src/"/>
+				<exclude name="plczip/plczip/"/>
+				<exclude name="pimple/pimple/lib/"/>
+				<exclude name="psr/log/Psr/Log/"/>
+				<exclude name="silex/silex/src/Silex/"/>
+				<exclude name="smottt/wideimage/lib/WideImage/"/>
+				<exclude name="symfony/"/>
+				<exclude name="mheap/silex-memcache/src/"/>
+				<exclude name="jrschumacher/symfony-redis-session-handler/src/"/>
+				<exclude name="autoload.php"/>
+			</fileset>
+			<fileset dir="${package.dir}/sitecake/${version}/vendor">
+				<include name="**/Tests/"/>
+				<include name="**/Test/"/>
+				<include name="**/tests/"/>
+				<include name="**/test/"/>
+			</fileset>
+		</delete>
+
+		<!-- Create zip archive -->
+		<if>
+			<and>
+				<isset property="build.type"/>
+				<equals arg1="${build.type}" arg2="interactive"/>
+			</and>
+			<then>
+				<phingcall target="zip-int"/>
+			</then>
+			<else>
+				<phingcall target="zip"/>
+			</else>
+		</if>
+	</target>
+
+	<target name="zip">
+		<!-- TODO: Check if path should be inside target dir to be consistent with editor -->
+		<if>
+			<equals arg1="${os.name}" arg2="Linux"/>
+			<then>
+				<resolvepath propertyName="build.dir.absolute" file="${build.dir}"/>
+				<exec command="zip -r ${build.dir.absolute}/sitecake-${version}-whitelabel.zip sitecake sitecake.php" dir="${package.dir}"/>
+			</then>
+			<else>
+				<zip destfile="${build.dir}/sitecake-${version}-whitelabel.zip"
+					 basedir="${package.dir}">
+					<fileset dir="${package.dir}">
+						<include name="sitecake/**" />
+						<include name="sitecake.php" />
+					</fileset>
+				</zip>
+			</else>
+		</if>
+	</target>
+
+	<target name="parse-params">
+		<!-- Overriding properties if passed from command line -->
+		<if>
+			<isset property="v"/>
+			<then>
+				<property name="version" value="${v}" override="yes"/>
+			</then>
+		</if>
+		<if>
+			<isset property="scev"/>
+			<then>
+				<property name="scedit.version" value="${scev}" override="yes"/>
+			</then>
+		</if>
+		<if>
+			<isset property="bd"/>
+			<then>
+				<property name="build.dir" value="${bd}" override="yes"/>
+			</then>
+		</if>
+		<if>
+			<isset property="pd"/>
+			<then>
+				<property name="package.dir" value="${pd}" override="yes"/>
+			</then>
+		</if>
+		<if>
+			<isset property="scepd"/>
+			<then>
+				<property name="scedit.package.dir" value="${scepd}" override="yes"/>
+			</then>
+		</if>
+		<if>
+			<isset property="scepkg"/>
+			<then>
+				<property name="scedit.package.dist" value="${scepkg}" override="yes"/>
+			</then>
+		</if>
+	</target>
+
+	<target name="build" depends="parse-params,deps,test,package">
+		<echo msg="SiteCake ${version}"/>
+	</target>
+
+	<!-- Interactive build -->
+	<target name="set-paths">
+		<propertyprompt propertyName="build.dir" defaultValue="${build.dir}" promptText="Please enter build path" promptCharacter=":"/>
+		<resolvepath propertyName="build.dir" file="${build.dir}"/>
+		<resolvepath propertyName="package.dir" file="${build.dir}/target"/>
+	</target>
+
+	<target name="fetch-scedit-int">
+		<propertyprompt propertyName="scedit.version" defaultValue="${scedit.version}" promptText="SiteCake Editor (scedit) version" promptCharacter=":"/>
+		<!-- Overwrite scedit.package.dist property -->
+		<property name="scedit.package.dist" value="../scedit2-whitelabel/sitecake-editor-client/target/sitecake-editor-client-${scedit.version}-dist.tar.gz"/>
+		<if>
+			<equals arg1="${os.name}" arg2="Linux"/>
+			<then>
+				<if>
+					<not>
+						<available file="${scedit.package.dist}" />
+					</not>
+					<then>
+						<propertyprompt propertyName="scedit.package.dist" defaultValue="${scedit.package.dist}" promptText="Path to the SiteCake Editor package" promptCharacter=":"/>
+						<resolvepath propertyName="scedit.package.dist" file="${scedit.package.dist}"/>
+					</then>
+				</if>
+				<phingcall target="fetch-scedit"/>
+			</then>
+			<else>
+				<if>
+					<not>
+						<available file="${scedit.package.dir}" type="dir"/>
+					</not>
+					<then>
+						<propertyprompt propertyName="scedit.package.dir" defaultValue="${scedit.package.dir}" promptText="Path to the SiteCake Editor directory" promptCharacter=":"/>
+						<resolvepath propertyName="scedit.package.dir" file="${scedit.package.dir}"/>
+					</then>
+				</if>
+				<phingcall target="fetch-scedit"/>
+			</else>
+		</if>
+	</target>
+
+	<target name="zip-int">
+		<propertyprompt propertyName="scedit.zip" defaultValue="y" promptText="Do you want to create zip archive?" promptCharacter=":"/>
+		<if>
+			<equals arg1="${scedit.zip}" arg2="y" />
+			<then>
+				<phingcall target="zip"/>
+			</then>
+		</if>
+	</target>
+
+	<target name="build-int" depends="parse-params,set-paths,deps,test">
+		<property name="build.type" value="interactive"/>
+		<phingcall target="package"/>
+		<echo msg="SiteCake ${version}"/>
+	</target>
+</project>
