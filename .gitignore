@@ -7,9 +7,8 @@ target
 .idea
 vendor
 build
+logs
 tmp
+client
 composer.lock
-phar-test
 
-tests/_output/*
-/client
