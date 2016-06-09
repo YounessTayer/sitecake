@@ -1,6 +1,9 @@
 <?php
 
-require __DIR__ . '/check.php';
+if (defined('SITECAKE_ENVIRONMENT') && in_array(SITECAKE_ENVIRONMENT, ['prod', 'dev']))
+{
+    require __DIR__ . '/check.php';
+}
 
 require __DIR__ . '/../vendor/autoload.php';
 

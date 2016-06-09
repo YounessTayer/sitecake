@@ -85,8 +85,19 @@ class Draft extends Page
 
     protected function _adjustNavLinks($entryPointPath)
     {
-        foreach (phpQuery::pq('.sc-nav a', $this->_evaluated) as $node)
+        // Get all editable links
+        $editableLinks = phpQuery::pq('[class*="' . self::SC_BASE_CLASS . '"] a', $this->_evaluated);
+
+        foreach (phpQuery::pq('a', $this->_evaluated) as $node)
         {
+            // Filter out editable links
+            foreach($editableLinks as $editableLink)
+            {
+                if($node->isSameNode($editableLink))
+                {
+                    continue 2;
+                }
+            }
             $href = $node->getAttribute('href');
             if (!Utils::isExternalNavLink($href) && Utils::isResourceUrl($href) && !Utils::isScResourceUrl($href))
             {

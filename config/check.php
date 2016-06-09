@@ -1,4 +1,10 @@
 <?php
+if($_SERVER['PHP_SELF'] == '/sitecake/${version}/config/check.php')
+{
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+}
 // Check for php version
 $phpVersion = preg_split("/[:.]/", phpversion());
 if (($phpVersion[0] * 10 + $phpVersion[1]) < 54)
@@ -17,7 +23,8 @@ if (!extension_loaded('mbstring'))
     trigger_error("mbstring lib (PHP extension) is required for Sitecake to run.", E_USER_ERROR);
 }
 // Check if document directory is writable and readable
-if(!is_writable('../') || !is_readable('../'))
+$rootSiteDir = realpath(dirname(__FILE__) . '/../../../');
+if(!is_writable($rootSiteDir) || !is_readable($rootSiteDir))
 {
     trigger_error("Root site directory have to be readable and writable.", E_USER_ERROR);
 }

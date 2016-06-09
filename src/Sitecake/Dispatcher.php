@@ -97,7 +97,8 @@ class Dispatcher
             $code = $e->getCode();
             $httpCodes = [400, 401, 403, 404, 405, 500];
 
-            if(empty($code) || !in_array($code, $httpCodes))
+            // TODO : Need to send real http status when new client is implemented
+			if(empty($code) || !in_array($code, $httpCodes))
             {
                 $code = 500;
             }

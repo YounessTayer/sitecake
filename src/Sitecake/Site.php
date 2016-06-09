@@ -1381,7 +1381,7 @@ class Site
             // webroot relative path prefix if include file
             if($this->isPageFile($pagePath))
             {
-                // For page files we need to add ../ yo resource links if needed
+                // For page files we need to add ../ to resource links if needed
                 $page->unprefixResourceUrls($this->_draftBaseUrl(),
                     str_repeat('../', (count(explode('/', $pagePath)) - 1)));
             }
