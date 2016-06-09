@@ -1,6 +1,6 @@
 <?php
 
-if (defined('SITECAKE_ENVIRONMENT') && in_array(SITECAKE_ENVIRONMENT, ['prod', 'dev']))
+if (!defined('SITECAKE_ENVIRONMENT') || in_array(SITECAKE_ENVIRONMENT, ['prod', 'dev']))
 {
     require __DIR__ . '/check.php';
 }
