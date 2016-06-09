@@ -107,7 +107,7 @@ class DraftTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('sitecake.php?page=page1.html', phpQuery::pq('#link1')->attr('href'));
         $this->assertEquals('sitecake.php?page=page2.php', phpQuery::pq('#link2')->attr('href'));
         $this->assertEquals('page3.html', phpQuery::pq('#link3')->attr('href'));
-        $this->assertEquals('page4.html', phpQuery::pq('#link4')->attr('href'));
+        $this->assertEquals('sitecake.php?page=page4.html', phpQuery::pq('#link4')->attr('href'));
     }
 
     public function testNormalizeResourcePaths()
@@ -143,7 +143,7 @@ class DraftTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('admin.php?page=about.html', phpQuery::pq('#l1')->elements[0]->getAttribute('href'));
         $this->assertEquals('admin.php?page=doc.html', phpQuery::pq('#l2')->elements[0]->getAttribute('href'));
         $this->assertEquals('http://google.com', phpQuery::pq('#l3')->elements[0]->getAttribute('href'));
-        $this->assertEquals('contact.html', phpQuery::pq('#l4')->elements[0]->getAttribute('href'));
+        $this->assertEquals('admin.php?page=contact.html', phpQuery::pq('#l4')->elements[0]->getAttribute('href'));
         $this->assertEquals('home.html', phpQuery::pq('#l5')->elements[0]->getAttribute('href'));
         $this->assertEquals('admin.php?page=about', phpQuery::pq('#l6')->elements[0]->getAttribute('href'));
         $this->assertEquals('#aaa', phpQuery::pq('#l7')->elements[0]->getAttribute('href'));

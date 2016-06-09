@@ -31,7 +31,8 @@ $handler = function (Silex\Application $app, Request $request)
         // TODO : Check if there is more codes used in app
         $possibleCodes = [400, 401, 403, 404, 405, 500];
 
-        if(empty($code) || !in_array($code, $possibleCodes))
+        // TODO : Need to send real http status when new client is implemented
+		if(empty($code) || !in_array($code, $possibleCodes))
         {
             $code = 500;
         }

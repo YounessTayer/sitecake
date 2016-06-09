@@ -15,6 +15,7 @@
     "require": {
         "php": ">=5.4.0",
         "ext-mbstring": "*",
+        "ext-gd": "*",
         "silex/silex": "1.2",
         "jdesrosiers/silex-cors-provider": "0.1",
         "symfony/translation": "2.3",
