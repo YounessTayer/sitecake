@@ -1,5 +1,5 @@
 <?php
-if($_SERVER['PHP_SELF'] == '/sitecake/${version}/config/check.php')
+if(basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"]))
 {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
@@ -30,7 +30,7 @@ if(!is_writable($rootSiteDir) || !is_readable($rootSiteDir))
 }
 
 // Echo OK message if check.php file is accessed directly
-if($_SERVER['PHP_SELF'] == '/sitecake/${version}/config/check.php')
+if(basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"]))
 {
     echo "Basic server configuration needed for Sitecake to run is OK";
 }
