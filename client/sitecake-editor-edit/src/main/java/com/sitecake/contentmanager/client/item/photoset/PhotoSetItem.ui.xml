@@ -1,0 +1,24 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	
+	<ui:with field='res' type='com.sitecake.contentmanager.client.resources.EditorClientBundle'/>
+	
+	<ui:style field="cssStyle" type='com.sitecake.contentmanager.client.item.photoset.PhotoSetItem.CssStyle'>
+		
+		.container {
+			position: relative;
+		}
+		
+		.set {
+		}
+		
+		.overlay {
+		}
+	</ui:style>
+	
+	<div class="sc-photoset {cssStyle.container}">
+		<div class="{cssStyle.set}" ui:field="setContainer"></div>
+		<div class="{cssStyle.overlay}"></div>
+	</div>
+	
+</ui:UiBinder>

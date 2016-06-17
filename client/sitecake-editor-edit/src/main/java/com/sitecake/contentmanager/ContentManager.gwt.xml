@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.3//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.3/distro-source/core/src/gwt-module.dtd">
+<module rename-to='contentmanager'>
+	<script src="//platform.twitter.com/widgets.js"/>
+	
+	<!-- Inherit the core Web Toolkit stuff. -->
+	<inherits name='com.google.gwt.user.User'/>
+	<inherits name="com.google.gwt.i18n.I18N"/>
+	<inherits name='com.google.gwt.http.HTTP'/>
+	<inherits name='com.google.gwt.json.JSON'/>
+	<inherits name='com.google.gwt.jsonp.Jsonp'/>
+	<inherits name="com.google.gwt.resources.Resources" />
+		
+	<inherits name="com.google.gwt.inject.Inject"/>
+	<inherits name='com.allen_sauer.gwt.dnd.gwt-dnd'/>
+	<inherits name="org.adamtacy.GWTEffects"></inherits>
+	<inherits name="com.bfr.client.Selection"></inherits>
+	<inherits name="com.sitecake.commons.Commons"></inherits>
+
+	<!--  -->
+	<!-- English language -->
+	<!-- <extend-property name="locale" values="en"/> -->	
+	
+	<!-- English will be 'default' language if locale is not specified -->
+	<!-- <set-property-fallback name="locale" value="en"/> -->
+	
+	<!-- Additional language: Serbian -->
+	<!-- <extend-property name="locale" values="sr"/> -->
+  
+	<!-- override user.agent property in order to reduce the number of permutation) -->
+	<set-property name="user.agent" value="gecko1_8,safari,ie8" />
+	  
+	<define-property name="user.agent.chrome" values="true, false"/>
+	<property-provider name="user.agent.chrome"><![CDATA[
+		var ua = navigator.userAgent.toLowerCase();
+		if (ua.indexOf("chrome") != -1) {
+			return "true";
+		} else {
+			return false;
+		}
+	]]></property-provider>
+	
+	
+	<generate-with class="com.sitecake.commons.compile.StringConstantsGenerator">
+		<when-type-assignable class="com.sitecake.contentmanager.client.GlobalConstants"/>
+	</generate-with>
+
+	<replace-with class="com.sitecake.contentmanager.client.item.text.TextItemImplStandard">
+		<when-type-is class="com.sitecake.contentmanager.client.item.text.TextItem"/>
+	</replace-with>	
+	
+	<replace-with class="com.sitecake.contentmanager.client.item.text.TextItemImplIE">
+		<when-type-is class="com.sitecake.contentmanager.client.item.text.TextItem"/>
+		<when-property-is name="user.agent" value="ie8" />
+	</replace-with>	
+	
+	<replace-with class="com.sitecake.contentmanager.client.item.list.ListItemImplStandard">
+		<when-type-is class="com.sitecake.contentmanager.client.item.list.ListItem"/>
+	</replace-with>	
+
+	<replace-with class="com.sitecake.contentmanager.client.item.fileuploader.FileUploaderItemImplStandard">
+		<when-type-is class="com.sitecake.contentmanager.client.item.fileuploader.FileUploaderItem"/>
+	</replace-with>	
+
+	<replace-with class="com.sitecake.contentmanager.client.item.fileuploader.FileUploaderItemImplStandard">
+		<when-type-is class="com.sitecake.contentmanager.client.item.fileuploader.FileUploaderItem"/>
+	</replace-with>	
+
+	<replace-with class="com.sitecake.contentmanager.client.dnd.DnDUploadDragControllerImplDummy">
+		<when-type-is class="com.sitecake.contentmanager.client.dnd.DnDUploadDragController"/>
+	</replace-with>
+	<replace-with class="com.sitecake.contentmanager.client.dnd.DnDUploadDragControllerImplMozilla">
+		<when-type-is class="com.sitecake.contentmanager.client.dnd.DnDUploadDragController"/>
+		<when-property-is name="user.agent" value="gecko1_8" />
+	</replace-with>
+	<replace-with class="com.sitecake.contentmanager.client.dnd.DnDUploadDragControllerImplChrome">
+		<when-type-is class="com.sitecake.contentmanager.client.dnd.DnDUploadDragController"/>
+		<when-property-is name="user.agent" value="safari" />
+		<when-property-is name="user.agent.chrome" value="true" />
+	</replace-with>
+	<replace-with class="com.sitecake.contentmanager.client.dnd.DnDUploadDragControllerImplSafari">
+		<when-type-is class="com.sitecake.contentmanager.client.dnd.DnDUploadDragController"/>
+		<when-property-is name="user.agent" value="safari" />
+		<when-property-is name="user.agent.chrome" value="false" />
+	</replace-with>
+
+	<replace-with class="com.sitecake.contentmanager.client.ModuleIE">
+		<when-type-is class="com.sitecake.contentmanager.client.Module"/>
+		<any>
+			<when-property-is name="user.agent" value="ie8" />
+			<when-property-is name="user.agent" value="ie6" />
+		</any>		
+	</replace-with>
+	
+	<replace-with class="com.sitecake.contentmanager.client.editable.DomUtilsImplStandard">
+		<when-type-is class="com.sitecake.contentmanager.client.editable.DomUtils"/>
+	</replace-with>
+	
+	<replace-with class="com.sitecake.contentmanager.client.editable.RangeImplStandard">
+		<when-type-is class="com.sitecake.contentmanager.client.editable.Range"/>
+	</replace-with>	
+	
+	<replace-with class="com.sitecake.contentmanager.client.editable.SelectionImplStandard">
+		<when-type-is class="com.sitecake.contentmanager.client.editable.SelectionImpl"/>
+	</replace-with>
+	
+	<source path="client" excludes="**/*Test.java"/>
+			
+	<!-- Specify the app entry point class. -->
+	<entry-point class='com.sitecake.contentmanager.client.Module'/>
+	
+</module>

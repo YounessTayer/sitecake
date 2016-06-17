@@ -1,0 +1,7 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder">
+	<ui:with field="ext" type="com.sitecake.contentmanager.client.resources.EditorClientBundle"/>
+
+	<div class="{ext.css.newItemSeparator}">
+	</div>
+</ui:UiBinder>

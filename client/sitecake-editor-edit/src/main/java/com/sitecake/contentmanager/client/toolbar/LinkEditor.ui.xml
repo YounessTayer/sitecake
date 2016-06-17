@@ -1,0 +1,60 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	
+	<ui:with field='res' type='com.sitecake.contentmanager.client.resources.EditorClientBundle'/>
+	
+	<ui:style>
+		
+	</ui:style>
+	
+	<g:FlowPanel styleName="{res.css.linkEditor}">
+		
+		<g:FlowPanel styleName="{res.css.linkEditorTypeSelector}">
+			<g:HTML styleName="{res.css.linkEditorTypeSelectorButton}" ui:field="typeButton">
+				<span ui:field="typeButtonLabel"></span>
+			</g:HTML>
+		</g:FlowPanel>
+		
+		<g:FlowPanel styleName="{res.css.linkEditorUrl}">
+			<g:TextBox styleName="{res.css.linkEditorUrlInput}" ui:field="urlInput"/>
+		</g:FlowPanel>
+		
+		<g:PushButton styleName="{res.css.linkEditorUnlinkButton}" ui:field="unlinkButton">
+			<g:upFace>
+				<div class="{res.css.linkEditorUnlinkButtonUp}"></div>
+			</g:upFace>
+			<g:upHoveringFace>
+				<div class="{res.css.linkEditorUnlinkButtonUpHover}"></div>
+			</g:upHoveringFace>
+			<g:downFace>
+				<div class="{res.css.linkEditorUnlinkButtonDown}"></div>
+			</g:downFace>
+		</g:PushButton>
+
+		<g:PushButton styleName="{res.css.linkEditorBoldButton}" ui:field="boldButton">
+			<g:upFace>
+				<div class="{res.css.linkEditorBoldButtonUp}"></div>
+			</g:upFace>
+			<g:upHoveringFace>
+				<div class="{res.css.linkEditorBoldButtonUpHover}"></div>
+			</g:upHoveringFace>
+			<g:downFace>
+				<div class="{res.css.linkEditorBoldButtonDown}"></div>
+			</g:downFace>
+		</g:PushButton>
+
+		<g:PushButton styleName="{res.css.linkEditorItalicButton}" ui:field="italicButton">
+			<g:upFace>
+				<div class="{res.css.linkEditorItalicButtonUp}"></div>
+			</g:upFace>
+			<g:upHoveringFace>
+				<div class="{res.css.linkEditorItalicButtonUpHover}"></div>
+			</g:upHoveringFace>
+			<g:downFace>
+				<div class="{res.css.linkEditorItalicButtonDown}"></div>
+			</g:downFace>
+		</g:PushButton>
+		
+	</g:FlowPanel>
+</ui:UiBinder> 

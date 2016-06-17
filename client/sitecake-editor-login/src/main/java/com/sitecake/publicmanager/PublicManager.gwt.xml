@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='publicmanager'>
+
+	<!-- Inherit the core Web Toolkit stuff.                        -->
+	<inherits name='com.google.gwt.user.User'/>
+	<inherits name="com.google.gwt.i18n.I18N"/>
+	<inherits name='com.google.gwt.http.HTTP'/>
+	<inherits name='com.google.gwt.json.JSON'/>
+	<inherits name='com.google.gwt.jsonp.Jsonp'/>
+	<inherits name="com.google.gwt.resources.Resources" />
+	
+	<inherits name="com.google.gwt.inject.Inject"/>
+	<inherits name="org.adamtacy.GWTEffects"></inherits>
+	<inherits name='com.sitecake.commons.Commons'/>
+
+	<!-- Specify the app entry point class.                         -->
+	<entry-point class='com.sitecake.publicmanager.client.Module'/>
+
+</module>

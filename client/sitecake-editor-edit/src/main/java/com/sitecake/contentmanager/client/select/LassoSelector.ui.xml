@@ -1,0 +1,64 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+	<ui:with field='res' type='com.sitecake.contentmanager.client.resources.EditorClientBundle'/>
+	
+	<ui:style>
+		.selector {
+			position: absolute;
+			z-index: 10000000;
+			cursor: pointer;
+		}
+		
+		.border {
+			position: absolute;
+			cursor: pointer;
+		}
+		
+		.horizontal-border {
+			left: 0;
+			right: 0;
+			height: 1px;
+		}
+		
+		.vertical-border {
+			top: 0;
+			bottom: 0;
+			width: 1px;
+		}
+		
+		.top-border {
+			top: 0;
+		}
+		
+		.right-border {
+			right: 0;
+		}
+
+		.bottom-border {
+			bottom: 0;
+		}
+
+		.left-border {
+			left: 0;
+		}
+		
+		.fill {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			cursor: pointer;
+		}
+	</ui:style>
+	
+	<div class="{style.selector} {res.css.lassoSelector}" ui:field="selector">
+		<div class="{style.border} {style.horizontal-border} {style.top-border} {res.css.lassoSelectorHorizontalBorder}"/>
+		<div class="{style.border} {style.vertical-border} {style.right-border} {res.css.lassoSelectorVerticalBorder}"/>
+		<div class="{style.border} {style.horizontal-border} {style.bottom-border} {res.css.lassoSelectorHorizontalBorder}"/>
+		<div class="{style.border} {style.vertical-border} {style.left-border} {res.css.lassoSelectorVerticalBorder}"/>
+		<div class="{style.fill} {res.css.lassoSelectorFill}"/>
+	</div>
+</ui:UiBinder>

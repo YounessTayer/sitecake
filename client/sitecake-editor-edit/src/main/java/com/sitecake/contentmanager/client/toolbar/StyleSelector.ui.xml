@@ -1,0 +1,22 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	
+	<ui:with field='res' type='com.sitecake.contentmanager.client.resources.EditorClientBundle'/>
+	
+	<ui:style type="com.sitecake.contentmanager.client.toolbar.StyleSelector.CssStyle">
+		.selectButton {
+		}
+		
+		.options {
+		}
+	</ui:style>
+	
+	<g:FlowPanel styleName="{res.css.styleSelector}">
+		<g:HTML styleName="{style.selectButton} {res.css.styleSelectorButton}" ui:field="selectButton">
+			<span ui:field="buttonLabel"></span>
+		</g:HTML>
+		<g:FlowPanel styleName="{style.options} {res.css.styleSelectorOptions}" ui:field="options"/>
+	</g:FlowPanel>
+		
+</ui:UiBinder>

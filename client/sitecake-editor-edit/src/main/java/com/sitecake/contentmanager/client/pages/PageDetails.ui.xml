@@ -1,0 +1,44 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" 
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+	xmlns:d="urn:import:com.google.gwt.dom.client">
+
+	<ui:with field='res' type='com.sitecake.contentmanager.client.resources.EditorClientBundle'/>
+	<ui:style field="cssStyle" type='com.sitecake.contentmanager.client.pages.PageDetails.CssStyle'>
+	
+		.container {
+		}
+		
+		.title {
+			font-size: 200%;
+			color: #b10000;
+		}
+
+		.description {
+			font-size: 200%;
+			color: #00b100;
+		}
+		
+		.url {
+			color: #888888;
+		}
+		
+		.description {
+			font-size: 80%;
+			color: #888888;
+		}
+
+		.keywords {
+			font-size: 80%;
+			color: #888888;
+		}
+	</ui:style>
+	
+	<g:FlowPanel styleName="{cssStyle.container}">
+		<g:TextArea styleName="{cssStyle.title}" ui:field="title"/>
+		<g:TextArea styleName="{cssStyle.url}" ui:field="url"/>
+		<g:TextArea styleName="{cssStyle.description}" ui:field="description"/>
+		<g:TextArea styleName="{cssStyle.keywords}" ui:field="keywords"/>		
+	</g:FlowPanel>
+	
+</ui:UiBinder>

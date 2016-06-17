@@ -1,0 +1,85 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:d="urn:import:com.google.gwt.dom.client">
+
+	<ui:with field='res' type='com.sitecake.publicmanager.client.resources.ClientBundle'/>
+	
+	<ui:style>
+		
+	</ui:style>
+	
+	<g:FlowPanel styleName="{res.css.loginDialog}">
+		
+		<g:HTML styleName="{res.css.loginDialogBackground}"/>
+		<g:Image styleName="{res.css.loginDialogLogo}" resource="{res.logo}" ui:field="logo"/>
+		<g:Label styleName="{res.css.loginDialogVersion}" ui:field="versionLabel"/>
+		
+		<g:PushButton styleName="{res.css.loginCloseButton}" ui:field="closeButton">
+			<g:upFace>
+				<div class="{res.css.loginCloseButtonUp}"/>
+			</g:upFace>
+			<g:upHoveringFace>
+				<div class="{res.css.loginCloseButtonUpHover}"/>
+			</g:upHoveringFace>
+			<g:downFace>
+				<div class="{res.css.loginCloseButtonDown}"/>
+			</g:downFace>
+		</g:PushButton>
+		
+		<g:FlowPanel ui:field="loginBox">
+			<g:Label styleName="{res.css.loginLabel}" ui:field="loginLabel"/>
+			
+			<g:PasswordTextBox styleName="{res.css.loginCredential}" ui:field="credentialInput"/>
+			
+			<g:PushButton styleName="{res.css.loginButton}" ui:field="loginButton">
+				<g:upFace>
+					<div class="{res.css.loginButtonUp}"></div>
+				</g:upFace>
+				<g:downFace>
+					<div class="{res.css.loginButtonDown}"></div>
+				</g:downFace>
+			</g:PushButton>
+			
+			<g:HTMLPanel>
+				<div style="clear:both"></div>
+				<g:Anchor ui:field="switchToChangeBox" styleName="{res.css.linkButton}"/>
+			</g:HTMLPanel>
+		</g:FlowPanel>
+		
+		<g:FlowPanel ui:field="changeBox">
+
+			<g:Label styleName="{res.css.loginLabel}" ui:field="oldCredentialLabel"/>
+			<g:PasswordTextBox styleName="{res.css.changeCredential}" ui:field="oldCredentialInput"/>
+			
+			<g:HTMLPanel>
+				<div style="clear:both"></div>
+				<hr></hr>
+			</g:HTMLPanel>
+
+			<g:Label styleName="{res.css.loginLabel}" ui:field="newCredentialLabel"/>
+			<g:PasswordTextBox styleName="{res.css.changeCredential}" ui:field="newCredentialInput"/>
+
+			<g:Label styleName="{res.css.loginLabel}" ui:field="newCredentialRepeatedLabel"/>
+			<g:PasswordTextBox styleName="{res.css.changeCredential}" ui:field="newCredential2Input"/>
+
+			<g:PushButton styleName="{res.css.changeButton}" ui:field="changeButton">
+				<g:upFace>
+					<div class="{res.css.loginButtonUp}"></div>
+				</g:upFace>
+				<g:downFace>
+					<div class="{res.css.loginButtonDown}"></div>
+				</g:downFace>
+			</g:PushButton>			
+
+			<g:Anchor ui:field="switchToLoginBox" styleName="{res.css.changeCancelButton}"/>
+			
+		</g:FlowPanel>
+		
+		<g:HTMLPanel>
+			<div style="clear:both"></div>
+			<g:Label styleName="{res.css.loginStatusLabel}" ui:field="statusLabel"></g:Label>
+		</g:HTMLPanel>
+				
+	</g:FlowPanel>
+	
+</ui:UiBinder>

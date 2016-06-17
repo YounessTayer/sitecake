@@ -2,6 +2,7 @@
 .project
 .settings
 target
+war
 .gitignore
 .buildpath
 .idea
@@ -9,6 +10,5 @@ vendor
 build
 logs
 tmp
-client
 composer.lock
 

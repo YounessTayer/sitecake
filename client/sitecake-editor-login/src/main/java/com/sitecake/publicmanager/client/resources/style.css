@@ -1,0 +1,340 @@
+@CHARSET "ISO-8859-1";
+
+#sitecake-toolbox,
+#sitecake-toolbox div,
+#sitecake-toolbox span,
+#sitecake-toolbox p,
+#sitecake-toolbox a,
+#sitecake-toolbox a:link,
+#sitecake-toolbox a:visited,
+#sitecake-toolbox *, 
+#sitecake-toolbox *:hover,
+#sitecake-toolbox *:active,
+#sitecake-toolbox *:focus {
+	margin: 0;
+	padding: 0;
+	border: none;
+	background: none;
+	color: #000000;
+	list-style: none;
+	font-variant: normal;
+	font-weight: normal;
+	font-stretch: normal;
+	font-style: normal;
+	font-size: 100%;
+	font-size-adjust: none;
+	letter-spacing: normal;
+	clear: none;
+	text-align: left;
+	text-decoration: none;
+	direction: ltr;
+	text-indent: 0;
+	text-shadow: none;
+	text-transform: none;
+	white-space: normal;
+	word-spacing: normal;
+	float: none;
+	line-height: normal;
+	overflow: visible;
+	position: static;
+	vertical-align: baseline;
+	visibility: visible;
+	opacity: 1;
+	z-index: 0;
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+}
+
+#sitecake-toolbox *:before,
+#sitecake-toolbox *:after {
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+}
+
+#sitecake-toolbox div.login-dialog {
+	position: fixed;
+	z-index: 10000004;
+	width: 294px;
+	box-sizing: content-box;
+	padding: 63px 32px 19px;
+}
+	
+@sprite #sitecake-toolbox div.login-dialog-background {
+	gwt-image: 'loginDialogBackground';
+	background-color: #2d2d2d;
+	width: 100%; 
+	height: 100%;
+	
+	border-radius:6px;  
+	-moz-border-radius:6px; 
+	-webkit-border-radius:6px;  
+	-khtml-border-radius:6px; 
+	
+	-moz-box-shadow: 0 1px 9px rgba(0,0,0,0.6);
+	-webkit-box-shadow: 0 1px 9px rgba(0,0,0,0.6);
+	box-shadow: 0 1px 9px rgba(0,0,0,0.6);
+	
+	position: absolute;
+	top: 0;
+	left: 0;
+	
+	opacity: 0.95;
+	z-index: -1;
+}
+
+#sitecake-toolbox img.login-dialog-logo {
+	position:absolute;
+	top:25px;
+	left:33px;
+}
+
+#sitecake-toolbox div.login-dialog-logo-space {
+	position:absolute;
+	top:25px;
+	left:33px;	
+}
+
+#sitecake-toolbox div.login-dialog-version {
+	position:absolute;
+	top:37px;
+	left:133px;
+	font: 10px Verdana,Geneva,sans-serif;
+	color: #DCDCDC;
+}
+
+#sitecake-toolbox div.login-dialog-close {
+	position: absolute;
+	top: 15px;
+	right: 18px;
+	width: 11px;
+	height: 11px;
+	cursor: pointer;
+	outline: none;	
+}
+
+@sprite #sitecake-toolbox div.login-dialog-close-up {
+	gwt-image: 'closeButtonUp';
+	width: 11px;
+	height: 11px;
+	cursor: pointer;
+}
+
+@sprite #sitecake-toolbox div.login-dialog-close-up-hover {
+	gwt-image: 'closeButtonUpHover';
+	width: 11px;
+	height: 11px;
+	cursor: pointer;
+}
+
+@sprite #sitecake-toolbox div.login-dialog-close-down {
+	gwt-image: 'closeButtonDown';
+	width: 11px;
+	height: 11px;
+	cursor: pointer;
+}
+
+#sitecake-toolbox div.login-label {
+	font: normal 11px Verdana, Geneva, sans-serif;
+	color: #fff;
+	text-shadow: rgba(0,0,0,0.4) 0 -1px;
+	padding-top: 9px;
+	padding-bottom: 5px;
+	float: left;
+	width: 250px;	
+}
+
+#sitecake-toolbox input.login-credential {
+	float:left;
+	width:200px;
+	box-sizing: content-box;
+	font: normal 13px/19px Verdana, Geneva, sans-serif;
+	color: #000;
+	height:20px;
+	padding:4px;
+	
+	background-color:white;
+	
+	border-radius:3px;  
+	-moz-border-radius:3px; 
+	-webkit-border-radius:3px;  
+	-khtml-border-radius:3px; 
+	
+	border:none;
+}
+
+@sprite #sitecake-toolbox input.login-credential.with-progress-animation {
+	gwt-image: 'progressAnimation';
+	background-position: 187px center;
+	float:left;
+	width:200px;
+	box-sizing: content-box;
+	font: normal 13px/19px Verdana, Geneva, sans-serif;
+	color: #000;
+	height:20px;
+	padding:4px;
+	
+	background-color:white;
+	
+	border-radius:3px;  
+	-moz-border-radius:3px; 
+	-webkit-border-radius:3px;  
+	-khtml-border-radius:3px; 
+	
+	border:none;	
+}
+
+#sitecake-toolbox input.change-credential {
+	float:left;
+	width:286px;
+	
+	font: normal 13px/19px Verdana, Geneva, sans-serif;
+	color: #000;
+	height:20px;
+	padding:4px;
+	margin-bottom:4px;
+	box-sizing: content-box;
+	background-color:white;
+	
+	border-radius:3px;  
+	-moz-border-radius:3px; 
+	-webkit-border-radius:3px;  
+	-khtml-border-radius:3px; 
+	
+	border:none;
+}
+
+@sprite #sitecake-toolbox input.change-credential.with-progress-animation {
+	gwt-image: 'progressAnimation';
+	background-position: 273px center;
+	float:left;
+	width:286px;
+	box-sizing: content-box;
+	font: normal 13px/19px Verdana, Geneva, sans-serif;
+	color: #000;
+	height:20px;
+	padding:4px;
+	margin-bottom:4px;
+	
+	background-color:white;
+	
+	border-radius:3px;  
+	-moz-border-radius:3px; 
+	-webkit-border-radius:3px;  
+	-khtml-border-radius:3px; 
+	
+	border:none;	
+}
+
+#sitecake-toolbox input.credential-input-error {
+	background-color:#fffcaa;
+}
+	
+#sitecake-toolbox div.login-button {
+	float:right;
+	font: bold 11px/30px Verdana, Geneva, sans-serif;
+	color: #fff;
+	text-align:center;
+	height:30px;
+	width:79px;
+	text-decoration:none;
+	cursor: pointer;
+	outline: none;
+	position: relative;
+	top: -1px;
+}
+
+#sitecake-toolbox div.change-button {
+	float:right;
+	font: bold 11px/30px Verdana, Geneva, sans-serif;
+	color: #fff;
+	text-align:center;
+	height:30px;
+	width:79px;
+	text-decoration:none;
+	cursor: pointer;
+	outline: none;
+	position: relative;
+	top: -1px;
+	margin-top:8px;
+}
+
+@sprite #sitecake-toolbox div.login-button-up {
+	gwt-image: 'loginButtonUp';
+	color: #fff;
+	font: bold 11px/30px Verdana, Geneva, sans-serif;
+	text-align:center;
+	text-decoration:none;
+	cursor: pointer;
+	line-height: 30px;
+}
+
+@sprite #sitecake-toolbox div.login-button-down {
+	gwt-image: 'loginButtonDown';
+	color: #fff;
+	font: bold 11px/30px Verdana, Geneva, sans-serif;
+	text-align:center;
+	text-decoration:none;
+	cursor: pointer;
+	outline: none;
+	line-height: 30px;
+}
+
+#sitecake-toolbox div.login-status-label {
+	font: normal 11px/14px Verdana, Geneva, sans-serif;
+	color: #fffcaa;
+	margin-top:6px;
+	position:relative;
+	top:7px;
+	max-height: 100px;
+	overflow: auto;
+}
+
+#sitecake-toolbox span.link-button {
+	display:inline;
+	font: 9px Verdana, Geneva, sans-serif;
+	color: #a0a0a0;
+	top: -0px;
+	position: relative;
+}
+
+#sitecake-toolbox a.link-button {
+	display:inline;
+	font: 9px Verdana, Geneva, sans-serif;
+	color: #a0a0a0;
+	text-decoration:none;
+	cursor: pointer;
+	top: -0px;
+	position: relative;
+}
+
+#sitecake-toolbox a.link-button:hover {
+	color:#fffcaa;
+	text-decoration:underline;	
+}
+
+#sitecake-toolbox a.change-cancel-button {
+	float: right;
+	margin: 17px 7px 0 0;
+	display:inline;
+	font: 9px Verdana, Geneva, sans-serif;
+	color: #a0a0a0;
+	text-decoration:none;
+	cursor: pointer;	
+}
+
+#sitecake-toolbox a.change-cancel-button:hover {
+	color:#fffcaa;
+	text-decoration:underline;	
+}
+
+#sitecake-toolbox div.login-dialog hr {
+	border:none;
+	height:1px;
+	background-color: #494949;	
+	-moz-box-shadow: 0 -1px 0 rgba(0,0,0,0.6);
+	-webkit-box-shadow: 0 -1px 0 rgba(0,0,0,0.6);
+	box-shadow: 0 -1px 0 rgba(0,0,0,0.6);
+	margin: 13px 0 0 0;
+}

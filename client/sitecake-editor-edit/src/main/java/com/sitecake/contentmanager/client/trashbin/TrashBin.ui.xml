@@ -1,0 +1,30 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+	<ui:with field='res' type='com.sitecake.contentmanager.client.resources.EditorClientBundle'/>
+	
+	<ui:style>
+		.bin {
+			position:fixed;
+			z-index: 10010000;
+			zoom: 1;
+		}
+		
+		.small-bin {
+			position: absolute;
+			top: 0;
+			left: 0;
+			outline: none;
+			border: none;
+			
+		}
+	</ui:style>
+	<div class="{style.bin} {res.css.trashBin}">
+	<!-- 
+		<img class="{style.small-bin}" src="{res.trashBinSmall.getURL}" ui:field="normalImage"/>
+		
+		<g:Image ui:field="normalImage"></g:Image>
+		<g:Image ui:field="overImage"></g:Image>
+	 -->
+	</div>
+</ui:UiBinder>

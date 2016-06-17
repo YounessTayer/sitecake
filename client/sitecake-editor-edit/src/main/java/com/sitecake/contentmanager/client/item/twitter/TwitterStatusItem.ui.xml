@@ -1,0 +1,59 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	
+	<ui:with field='res' type='com.sitecake.contentmanager.client.resources.EditorClientBundle'/>
+	
+	<ui:style field="cssStyle" type='com.sitecake.contentmanager.client.item.twitter.TwitterStatusItem.CssStyle'>
+		
+		.container {
+			position: relative;
+			display: block;
+			max-width: 99.2%;
+			min-width: 220px;
+			width: 537px;
+		}
+		
+		.container.initialized {
+
+		}
+		
+		.status {
+			position:relative;
+			left:0px;
+			top:0px;
+			right:0px;
+			bottom:0px;
+		}
+
+		.placeholder {
+			position: relative;
+			left:0px;
+			top:0px;
+			right:0px;
+			height: 200px;
+			background: blue;
+			filter: literal("alpha(opacity=20)");
+			opacity: 0.2;			
+		}
+		
+		.initialized.placeholder {
+			display: none;
+		}
+		
+		.overlay {
+			position:absolute;
+			left:0px;
+			top:0px;
+			right:0px;
+			bottom:0px;	
+		}
+
+	</ui:style>
+	
+	<div class="sc-twitter-status {cssStyle.container}">
+		<div class="{cssStyle.placeholder}" ui:field="statusPlaceholder"></div>
+		<div class="{cssStyle.status}" ui:field="statusContainer"></div>
+		<div class="{cssStyle.overlay}"></div>
+	</div>
+	
+</ui:UiBinder>

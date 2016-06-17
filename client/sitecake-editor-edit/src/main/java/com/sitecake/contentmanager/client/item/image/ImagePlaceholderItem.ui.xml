@@ -1,0 +1,35 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder">
+	
+	<ui:with field='res' type='com.sitecake.contentmanager.client.resources.EditorClientBundle'/>
+	
+	<ui:style field="cssStyle" type='com.sitecake.contentmanager.client.item.image.ImagePlaceholderItem.CssStyle'>
+		
+		.container {
+			width: 100%;
+			min-height: 200px;
+			position: relative;
+		}
+		
+		.imgContainer {
+		}
+		
+		.block {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: blue;
+			filter: literal("alpha(opacity=20)");
+			opacity: 0.2;			
+		}
+	</ui:style>
+	
+	<div class="{cssStyle.container}">
+		<div class="{cssStyle.imgContainer}" ui:field="imgContainer"></div>
+		<div class="{cssStyle.block} {res.css.imageEditorFrameBorder}">
+			Processing...
+		</div>
+	</div>
+</ui:UiBinder>

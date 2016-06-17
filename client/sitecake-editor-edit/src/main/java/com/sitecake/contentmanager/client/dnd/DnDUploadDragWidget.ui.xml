@@ -1,0 +1,16 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder">
+	<ui:style>
+		.container {
+			position: absolute;
+			width: 10px;
+			height: 10px;
+			background-color: #ffcc88;
+			opacity: 0;
+			filter: literal("alpha(opacity=0)");
+			z-index: -100;
+		}
+	</ui:style>
+	<div class="{style.container}">
+	</div>
+</ui:UiBinder>

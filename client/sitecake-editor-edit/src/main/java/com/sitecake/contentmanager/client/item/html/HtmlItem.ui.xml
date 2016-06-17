@@ -1,0 +1,11 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	
+	<ui:with field='res' type='com.sitecake.contentmanager.client.resources.EditorClientBundle'/>
+	
+	<div class="sc-html" style="position:relative">
+		<div style="position:absolute;left:0px;top:0px;right:0px;bottom:0px;z-index:-1"></div>
+		<textarea ui:field="codeEditor" class="{res.css.htmlItemCode}"/>
+		<div ui:field="codeWrapper"/>
+	</div>
+</ui:UiBinder>

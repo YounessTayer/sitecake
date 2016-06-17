@@ -1,0 +1,83 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	
+	<ui:with field='res' type='com.sitecake.contentmanager.client.resources.EditorClientBundle'/>
+	
+	<ui:style field="cssStyle" type="com.sitecake.contentmanager.client.errors.ErrorNotificationDisplay.CssStyle">
+		.openedState {
+		}
+		
+		.header {
+			padding: 7px 20px 8px 30px;
+			position: relative;
+			background-color: #FFF1A8;	
+			z-index: 10;
+		}
+		
+		.header a {
+			color: red;
+			text-decoration: none;
+			margin-left: 5px;
+			cursor: pointer;
+		}
+		
+		.openedState .header {
+			border-bottom: 1px solid #ebdf9f;
+		}
+		
+		.lastNotification {
+			display: inline;
+		}
+		
+		.closeButton {
+			float: right;
+			margin-right: -14px;
+		}
+		
+		.notifications {
+			max-height: 288px;
+			overflow-y: auto;
+			margin: 20px 7px 20px 30px;
+			padding-right: 13px;
+			z-index: 1;
+		}
+		
+		.notifications > div {
+			font: 11px Verdana, Geneva, sans-serif;
+			border-bottom: 1px solid #ebdf9f;
+			margin-bottom: 15px;
+			padding-bottom: 8px;			
+		}
+		
+		.notifications p {
+			padding-bottom: 7px;
+		}
+	</ui:style>
+
+	<g:FlowPanel styleName="{res.css.errorNotificationDisplay}">
+		
+		<g:FlowPanel ui:field="header" styleName="{cssStyle.header}">
+		
+			<g:HTML ui:field="lastNotification" styleName="{cssStyle.lastNotification}"/>
+			
+			<g:Anchor ui:field="detailsButton"/>
+			
+			<g:PushButton styleName="{res.css.errorNotificationCloseButton} {cssStyle.closeButton}" ui:field="closeButton">
+				<g:upFace>
+					<div class="{res.css.errorNotificationCloseButtonUp}"></div>
+				</g:upFace>
+				<g:upHoveringFace>
+					<div class="{res.css.errorNotificationCloseButtonUpHover}"></div>
+				</g:upHoveringFace>
+				<g:downFace>
+					<div class="{res.css.errorNotificationCloseButtonDown}"></div>
+				</g:downFace>
+			</g:PushButton>
+					
+		</g:FlowPanel>
+		
+		<g:FlowPanel ui:field="notifications" styleName="{cssStyle.notifications}"/>
+		
+	</g:FlowPanel>
+	
+</ui:UiBinder> 

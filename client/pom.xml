@@ -1,0 +1,91 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.sitecake</groupId>
+  <artifactId>sitecake-editor</artifactId>
+  <version>2.3.1</version>
+  <packaging>pom</packaging>
+  <name>SiteCake Editor</name>
+  <description>SiteCake Editor top project</description>
+  <modules>
+  	<module>sitecake-editor-edit</module>
+  	<module>sitecake-editor-login</module>
+  	<module>sitecake-editor-client</module>
+  	<module>sitecake-editor-commons</module>
+  </modules>
+  
+	<developers>
+		<developer>
+			<id>nikola</id>
+			<name>Nikola Ivancevic</name>
+			<email>ivancevic.nikola@gmail.com</email>
+		</developer>
+	</developers>
+	
+	<pluginRepositories>
+		<pluginRepository>
+			<id>oss.sonatype.org</id>
+			<url>https://oss.sonatype.org/content/repositories/releases</url>
+		</pluginRepository>
+	</pluginRepositories>
+  
+	<repositories>
+		<repository>
+			<id>oss.sonatype.org</id>
+			<url>https://oss.sonatype.org/content/repositories/releases</url>
+		</repository>
+		<repository>
+			<id>sitecake-maven-repo</id>
+			<url>https://github.com/sitecake/maven-repo/raw/master</url>
+		</repository>
+				
+	</repositories>
+ 
+	<properties>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+	</properties> 
+		
+  <build>
+	<resources>
+		<resource>
+			<directory>src/main/resources</directory>
+			<filtering>true</filtering>
+			<includes>
+				<include>**/*.properties</include>
+				<include>**/*.xml</include>
+			</includes>
+		</resource>
+	</resources>
+	
+  	<plugins>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-release-plugin</artifactId>
+			<version>2.0</version>
+			<configuration>
+				<preparationGoals>clean install</preparationGoals>
+				<localCheckout>false</localCheckout>
+			</configuration>
+		</plugin>
+
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<version>2.3.2</version>
+			<configuration>
+				<encoding>UTF-8</encoding>
+			</configuration>
+		</plugin>
+			     		
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-resources-plugin</artifactId>
+			<version>2.4</version>
+			<configuration>
+				<encoding>UTF-8</encoding>
+			</configuration>
+		</plugin>
+  	</plugins>
+  </build>
+  
+</project>

@@ -1,0 +1,75 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" 
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+	xmlns:d="urn:import:com.google.gwt.dom.client">
+
+	<ui:with field='res' type='com.sitecake.contentmanager.client.resources.EditorClientBundle'/>
+	<ui:style field="cssStyle" type='com.sitecake.contentmanager.client.pages.PageWidget.CssStyle'>
+	
+		.container {
+			width: 148px;
+			height: 198px;
+			border: solid 1px black;
+			overflow: hidden;
+			display: inline-block;
+			margin: 10px;
+			position: relative;
+		}
+		
+		.dndHandle {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
+		
+		.title {
+			font-size: 200%;
+			color: #b10000;
+		}
+
+		.navTitle {
+			font-size: 200%;
+			color: #00b100;
+		}
+		
+		.url {
+			color: #888888;
+		}
+		
+		.description {
+			font-size: 80%;
+			color: #888888;
+		}
+
+		.keywords {
+			font-size: 80%;
+			color: #888888;
+		}
+		
+		.cloneButton {
+			position: absolute;
+			bottom: 5px;
+			left: 10px;
+		}
+
+		.deleteButton {
+			position: absolute;
+			bottom: 5px;
+			right: 10px;
+		}		
+	</ui:style>
+	
+	<g:FlowPanel styleName="{cssStyle.container}">
+		<g:Label styleName="{cssStyle.title}" ui:field="title"/>
+		<g:Label styleName="{cssStyle.navTitle}" ui:field="navTitle"/>		
+		<g:Label styleName="{cssStyle.url}" ui:field="url"/>
+		<g:Label styleName="{cssStyle.description}" ui:field="pageDescription"/>
+		<g:Label styleName="{cssStyle.keywords}" ui:field="pageKeywords"/>		
+		<g:HTML styleName="{cssStyle.dndHandle}" ui:field="dndHandle"/>
+		<g:Button styleName="{cssStyle.cloneButton}" text="Clone" ui:field="cloneButton"/>
+		<g:Button styleName="{cssStyle.deleteButton}" text="Delete" ui:field="deleteButton"/>
+	</g:FlowPanel>
+	
+</ui:UiBinder>

@@ -1,0 +1,91 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:d="urn:import:com.google.gwt.dom.client">
+	
+	<ui:with field='res' type='com.sitecake.contentmanager.client.resources.EditorClientBundle'/>
+	
+	<ui:style field="cssStyle" type='com.sitecake.contentmanager.client.item.video.VideoItem.CssStyle'>
+	
+		div.topContainer {
+			position: relative;
+		}
+		
+		div.codeContainer {
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+		}
+
+		div.selectOverlay {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			width: 100%;
+			height: 100%;
+			display: none;			
+		}
+				
+		div.overlay {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			width: 100%;
+			height: 100%;
+		}
+		
+		div.resizeControles {
+			display: none;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			width: 100%;
+			height: 100%;			
+		}
+		
+		div.handle {
+			position:absolute;
+			width:7px;
+			height:7px;
+			z-index: 100;			
+		}
+		
+		div.handle-nw {
+			top:-4px;
+			left:-4px;
+			cursor: nw-resize;			
+		}
+		
+		div.handle-ne {
+			top:-4px;
+			right:-4px;	
+			cursor: ne-resize;				
+		}
+		
+		div.handle-sw {
+			bottom:-4px;
+			left:-4px;
+			cursor: sw-resize;			
+		}
+		
+		div.handle-se {
+			bottom:-4px;
+			right:-4px;
+			cursor: se-resize;			
+		}
+		
+		.working div.handle {
+			display: none;
+		}
+	</ui:style>
+	
+	<div class="sc-video {cssStyle.topContainer}">
+		<div class="{cssStyle.codeContainer}" ui:field="codeContainer"/>
+		<div class="{cssStyle.selectOverlay} {res.css.videoEditorSelectOverlay}" ui:field="selectOverlay"/>
+		<div class="{cssStyle.overlay}"/>
+		<div class="{cssStyle.resizeControles}" ui:field="resizeControles">
+			<div class="{cssStyle.handle} {res.css.imageEditorHandle} {cssStyle.handle-nw}" ui:field="handleNW"></div>
+			<div class="{cssStyle.handle} {res.css.imageEditorHandle} {cssStyle.handle-ne}" ui:field="handleNE"></div>
+			<div class="{cssStyle.handle} {res.css.imageEditorHandle} {cssStyle.handle-se}" ui:field="handleSE"></div>
+			<div class="{cssStyle.handle} {res.css.imageEditorHandle} {cssStyle.handle-sw}" ui:field="handleSW"></div>
+		</div>
+	</div>
+</ui:UiBinder>

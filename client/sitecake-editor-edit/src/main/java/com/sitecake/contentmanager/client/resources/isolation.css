@@ -1,0 +1,37 @@
+.sc-css-isolated,
+.sc-css-isolated *,
+.sc-css-isolated a:link,
+.sc-css-isolated a:visited,
+.sc-css-isolated *:hover,
+.sc-css-isolated *:active,
+.sc-css-isolated *:focus {
+	margin: 0;
+	padding: 0;
+	border: none;
+	background: none;
+	color: #000000;
+	list-style: none;
+	font-variant: normal;
+	font-weight: normal;
+	font-stretch: normal;
+	font-style: normal;
+	font-size: 100%;
+	font-size-adjust: none;
+	outline: none;
+	letter-spacing: normal;
+	clear: none;
+	text-align: left;
+	text-decoration: none;
+	direction: ltr;
+	text-indent: 0;
+	text-shadow: none;
+	text-transform: none;
+	white-space: normal;
+	word-spacing: normal;
+	float: none;
+	line-height: normal;
+	overflow: visible;
+	position: static;
+	vertical-align: baseline;
+	visibility: visible;	
+}
