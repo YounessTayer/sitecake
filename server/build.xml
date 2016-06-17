@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="SiteCake" default="build" basedir="." description="SiteCake CMS">
-	<property name="version" value="2.3.2"/>
-	<property name="scedit.version" value="2.3.1"/>
+	<property name="version" value="2.3.3-SNAPSHOT"/>
+	<property name="scedit.version" value="${version}"/>
 
 	<property name="build.dir" value="./build"/>
 	<property name="package.dir" value="${build.dir}/target"/>
 
-	<property name="scedit.package.dir" value="../scedit2-whitelabel/sitecake-editor-client/target"/>
-	<property name="scedit.package.dist" value="../scedit2-whitelabel/sitecake-editor-client/target/sitecake-editor-client-${scedit.version}-dist.tar.gz"/>
+	<property name="scedit.package.dir" value="../client/sitecake-editor-client/target"/>
+	<property name="scedit.package.dist" value="../client/sitecake-editor-client/target/sitecake-editor-client-${scedit.version}-dist.tar.gz"/>
 
 	<target name="clean-deps">
 		<if>
