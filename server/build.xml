@@ -6,7 +6,7 @@
 	<property name="build.dir" value="./build"/>
 	<property name="package.dir" value="${build.dir}/target"/>
 
-	<property name="scedit.package.dir" value="../client/sitecake-editor-client/target"/>
+	<property name="scedit.package.dir" value="../client/sitecake-editor-client/target/sitecake-editor-client-${scedit.version}"/>
 	<property name="scedit.package.dist" value="../client/sitecake-editor-client/target/sitecake-editor-client-${scedit.version}-dist.tar.gz"/>
 
 	<target name="clean-deps">
