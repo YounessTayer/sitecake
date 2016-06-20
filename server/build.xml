@@ -113,7 +113,7 @@
 			<and>
 				<isset property="build.type"/>
 				<equals arg1="${build.type}" arg2="interactive"/>
-				<available file="${package.dir}"/>
+				<available file="${build.dir}"/>
 			</and>
 			<then>
 				<propertyprompt propertyName="build.clean" defaultValue="y" promptText="Destination dir already exists. Do you want to remove it before build?" promptCharacter=":"/>
