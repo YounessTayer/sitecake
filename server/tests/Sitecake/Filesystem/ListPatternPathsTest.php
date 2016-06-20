@@ -4,7 +4,7 @@ namespace Sitecake\Filesystem;
 
 class ListPatternPathsTest extends \PHPUnit_Framework_TestCase {
 	
-    public function teardown() {
+    public function tearDown() {
         \Mockery::close();
     }
     	

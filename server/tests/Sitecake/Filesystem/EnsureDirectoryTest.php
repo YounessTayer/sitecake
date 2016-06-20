@@ -4,7 +4,7 @@ namespace Sitecake\Filesystem;
 
 class EnsureDirectoryTest extends \PHPUnit_Framework_TestCase {
 	
-    public function teardown() {
+    public function tearDown() {
         \Mockery::close();
     }
 

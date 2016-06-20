@@ -5,7 +5,7 @@ namespace Sitecake\Filesystem;
 class CopyPathsTest extends \PHPUnit_Framework_TestCase
 {
 	
-    public function teardown() {
+    public function tearDown() {
         \Mockery::close();
     }
 

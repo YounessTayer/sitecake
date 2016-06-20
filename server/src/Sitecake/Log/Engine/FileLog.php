@@ -140,7 +140,6 @@ class FileLog extends BaseLog
             $this->_archiveFile($filename);
         }
 
-        // TODO : Check if this will work with FTP. If not do it with league filesystem
         $content = $this->_fs->read($pathname);
         return (bool)$this->_fs->put($pathname, $content . $output);
     }

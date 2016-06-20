@@ -26,26 +26,25 @@ class FileLogTest extends \PHPUnit_Framework_TestCase
     private $root;
 
     /**
+     * Clear test environment
+     */
+    public function tearDown() {
+        \Mockery::close();
+    }
+
+    /**
      * Set up test environment
      */
     public function setUp()
     {
         $this->root = vfsStream::setup('root');
     }
-
-    public function testLog()
+    
+    public function testScDebugLog()
     {
         $fs = \Mockery::mock('League\Flysystem\Filesystem');
         $fs->shouldReceive('has')
             ->with('sitecake-temp/logs/sc-debug.log')
-            ->andReturn(false)
-            ->once();
-        $fs->shouldReceive('has')
-            ->with('sitecake-temp/logs/sitecake.log')
-            ->andReturn(false)
-            ->once();
-        $fs->shouldReceive('has')
-            ->with('sitecake-temp/logs/custom.log')
             ->andReturn(false)
             ->once();
         $fs->shouldReceive('write')
@@ -63,12 +62,57 @@ class FileLogTest extends \PHPUnit_Framework_TestCase
                 return true;
             })
             ->once();
+        $fs->shouldReceive('read')
+            ->with('sitecake-temp/logs/sc-debug.log')
+            ->andReturn('')
+            ->once();
+        $fs->shouldReceive('getMetadata')
+            ->with('sitecake-temp/logs/sc-debug.log')
+            ->andReturn(['size' => 2097151])
+            ->once();
+        $fs->shouldReceive('ensureDir')
+            ->with('sitecake-temp/logs')
+            ->andReturn(true)
+            ->once();
+
+        $this->assertFalse($this->root->hasChild('sitecake/logs'));
+
+        $logger = new FileLog($fs, [
+            'log.size' => '2MB',
+            'log.archive_size' => 2,
+            'debug' => true
+        ]);
+
+        $this->assertFalse($this->root->hasChild('sitecake-temp/logs/sc-debug.log'));
+        $logger->log('debug', 'Test debug');
+        $this->assertTrue($this->root->hasChild('sitecake-temp/logs/sc-debug.log'));
+        $this->assertRegExp('/\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\] Debug: Test debug/',
+            trim($this->root->getChild('sitecake-temp/logs/sc-debug.log')->getContent()));
+    }
+
+    public function testDefaultErrorLog()
+    {
+        $fs = \Mockery::mock('League\Flysystem\Filesystem');
+        
+        $fs->shouldReceive('ensureDir')
+            ->with('sitecake-temp/logs')
+            ->andReturn(true)
+            ->once();
+        
+        $fs->shouldReceive('has')
+            ->with('sitecake-temp/logs/sitecake.log')
+            ->andReturn(false)
+            ->once();
         $fs->shouldReceive('write')
             ->with('sitecake-temp/logs/sitecake.log', '')
             ->andReturnUsing(function () {
                 $this->root->addChild(new vfsStreamFile('sitecake-temp/logs/sitecake.log'));
                 return true;
             })
+            ->twice();
+        $fs->shouldReceive('read')
+            ->with('sitecake-temp/logs/sitecake.log')
+            ->andReturn('')
             ->once();
         $fs->shouldReceive('put')
             ->with('sitecake-temp/logs/sitecake.log', '[2016-01-01 23:23:23] Error: Test error' . "\n")
@@ -77,6 +121,48 @@ class FileLogTest extends \PHPUnit_Framework_TestCase
                     ->setContent('[2016-01-01 23:23:23] Error: Test error' . "\n");
                 return true;
             })
+            ->once();
+
+        $fs->shouldReceive('getMetadata')
+            ->with('sitecake-temp/logs/sitecake.log')
+            ->andReturn(['size' => 2097153])
+            ->once();
+        $fs->shouldReceive('rename')
+            ->with('sitecake-temp/logs/sitecake.log', 'sitecake-temp/logs/sitecake.log.123456789')
+            ->andReturnUsing(function () {
+                $this->root->addChild(new vfsStreamFile('sitecake-temp/logs/sitecake.log.123456789'));
+                return true;
+            })
+            ->once();
+
+        $this->assertFalse($this->root->hasChild('sitecake/logs'));
+
+        $logger = new FileLog($fs, [
+            'log.size' => '2MB',
+            'log.archive_size' => 2,
+            'debug' => true
+        ]);
+
+        $this->assertFalse($this->root->hasChild('sitecake-temp/logs/sitecake.log'));
+
+        $logger->log('error', 'Test error');
+
+        $this->assertTrue($this->root->hasChild('sitecake-temp/logs/sitecake.log'));
+        $this->assertTrue($this->root->hasChild('sitecake-temp/logs/sitecake.log.123456789'));
+        $this->assertEquals('[2016-01-01 23:23:23] Error: Test error',
+            trim($this->root->getChild('sitecake-temp/logs/sitecake.log')->getContent()));
+    }
+
+    public function testCustomLog()
+    {
+        $fs = \Mockery::mock('League\Flysystem\Filesystem');
+        $fs->shouldReceive('ensureDir')
+            ->with('sitecake-temp/logs')
+            ->andReturn(true)
+            ->once();
+        $fs->shouldReceive('has')
+            ->with('sitecake-temp/logs/custom.log')
+            ->andReturn(false)
             ->once();
         $fs->shouldReceive('write')
             ->with('sitecake-temp/logs/custom.log', '')
@@ -100,39 +186,12 @@ class FileLogTest extends \PHPUnit_Framework_TestCase
             })
             ->once();
         $fs->shouldReceive('read')
-            ->with('sitecake-temp/logs/sitecake.log')
-            ->andReturn('')
-            ->once();
-        $fs->shouldReceive('read')
-            ->with('sitecake-temp/logs/sc-debug.log')
-            ->andReturn('')
-            ->once();
-        $fs->shouldReceive('read')
             ->with('sitecake-temp/logs/custom.log')
             ->andReturn('[2016-01-01 23:23:23] Error: Test error custom' . "\n")
             ->once();
-        $fs->shouldReceive('ensureDir')
-            ->with('sitecake-temp/logs')
-            ->andReturn(true)
-            ->once();
-        $fs->shouldReceive('getMetadata')
-            ->with('sitecake-temp/logs/sitecake.log')
-            ->andReturn(['size' => 2097153])
-            ->once();
-        $fs->shouldReceive('getMetadata')
-            ->with('sitecake-temp/logs/sc-debug.log')
-            ->andReturn(['size' => 2097151])
-            ->once();
         $fs->shouldReceive('getMetadata')
             ->with('sitecake-temp/logs/custom.log')
             ->andReturn(['size' => 2097153])
-            ->once();
-        $fs->shouldReceive('rename')
-            ->with('sitecake-temp/logs/sitecake.log', 'sitecake-temp/logs/sitecake.log.123456789')
-            ->andReturnUsing(function () {
-                $this->root->addChild(new vfsStreamFile('sitecake-temp/logs/sitecake.log.123456789'));
-                return true;
-            })
             ->once();
         $fs->shouldReceive('delete')
             ->with('sitecake-temp/logs/custom.log')
@@ -140,24 +199,6 @@ class FileLogTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->assertFalse($this->root->hasChild('sitecake/logs'));
-        $logger = new FileLog($fs, [
-            'log.size' => '2MB',
-            'log.archive_size' => 2,
-            'debug' => true
-        ]);
-
-        $this->assertFalse($this->root->hasChild('sitecake-temp/logs/sitecake.log'));
-        $logger->log('error', 'Test error');
-        $this->assertTrue($this->root->hasChild('sitecake-temp/logs/sitecake.log'));
-        $this->assertTrue($this->root->hasChild('sitecake-temp/logs/sitecake.log.123456789'));
-        $this->assertEquals('[2016-01-01 23:23:23] Error: Test error',
-            trim($this->root->getChild('sitecake-temp/logs/sitecake.log')->getContent()));
-
-        $this->assertFalse($this->root->hasChild('sitecake-temp/logs/sc-debug.log'));
-        $logger->log('debug', 'Test debug');
-        $this->assertTrue($this->root->hasChild('sitecake-temp/logs/sc-debug.log'));
-        $this->assertRegExp('/\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\] Debug: Test debug/',
-            trim($this->root->getChild('sitecake-temp/logs/sc-debug.log')->getContent()));
 
         $logger = new FileLog($fs, [
             'log.size' => '2MB',
