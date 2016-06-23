@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sitecake</groupId>
   <artifactId>sitecake-editor</artifactId>
-  <version>2.3.3</version>
+  <version>2.3.4dev</version>
   <packaging>pom</packaging>
   <name>SiteCake Editor</name>
   <description>SiteCake Editor top project</description>
