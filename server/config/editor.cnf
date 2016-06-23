@@ -19,7 +19,7 @@
 Toolbar.components = HEADING1,HEADING2,HEADING3,TEXTLIST,TEXT,SEP,IMAGE,VIDEO,SEP,FLASH,MAP,HTML,FILE
 
 # upload size limit in KB
-FileUploaderItem.uploadSizeLimit = 8192
+FileUploaderItem.uploadSizeLimit = 20000
 
 # interface language (en, sl, sr, es, de, fr, dk, it, ru, cs, sk, pt, pt-br, auto)
 Locale.code = auto
