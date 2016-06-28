@@ -208,7 +208,7 @@ class ErrorHandler
 
         $traceStr = "<pre class=\"sitecake-error\" style=\"background: #E4E4E4;border-radius:5px;margin:10px;padding:15px;\">";
         $traceStr .= sprintf('<p style="margin:0;"><strong>%s:</strong> %s <strong>in file</strong> %s <strong>on line</strong> (#%s)</p>',
-            $error['error'], $error['description'], self::_hideServerInfo($error['file']), $error['line']);
+            $error['error'], self::_hideServerInfo($error['description']), self::_hideServerInfo($error['file']), $error['line']);
 
         /*$trace = debug_backtrace();
         $traceStr .= "<div>";
@@ -241,12 +241,12 @@ class ErrorHandler
     /**
      * Transforms path to hide server information
      *
-     * @param $path
+     * @param string $content
      */
-    protected static function _hideServerInfo($path)
+    protected static function _hideServerInfo($content)
     {
-        $path = str_replace(self::$_config['BASE_DIR'], '[SITE]', $path);
-        return str_replace(DIRECTORY_SEPARATOR, '/', $path);
+        $content = str_replace(self::$_config['BASE_DIR'], '[SITE]', $content);
+        return str_replace(DIRECTORY_SEPARATOR, '/', $content);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="SiteCake" default="build" basedir="." description="SiteCake CMS">
-	<property name="version" value="2.3.4dev"/>
+	<property name="version" value="2.3.4"/>
 	<property name="scedit.version" value="${version}"/>
 
 	<property name="build.dir" value="./build"/>

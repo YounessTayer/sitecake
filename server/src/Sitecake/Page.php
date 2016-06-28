@@ -117,8 +117,8 @@ class Page
 
             foreach($attributes as $attribute)
             {
-                $value = $node->hasAttribute($attribute) ? $node->getAttribute($attribute) : false;
-                if($value)
+                $attributeValue = $node->hasAttribute($attribute) ? $node->getAttribute($attribute) : false;
+                if($attributeValue)
                 {
                     // Strip passed prefix from resource urls
                     HtmlUtils::unprefixNodeAttr($node, $attribute, $prefix, function ($url) {
@@ -151,10 +151,10 @@ class Page
                         $newValue = str_replace(['//'], '/', $newValue);
                     }
 
-                    if($value != $newValue)
+                    if($attributeValue != $newValue)
                     {
                         $this->_source = preg_replace(
-                            '/' . preg_quote($attribute . '="' . $value . '"', '/') . '/',
+                            '/' . preg_quote($attribute . '="' . $attributeValue . '"', '/') . '/',
                             $attribute . '="' . $newValue . '"',
                             $this->_source, 1
                         );

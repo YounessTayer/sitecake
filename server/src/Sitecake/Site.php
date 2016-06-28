@@ -820,12 +820,23 @@ class Site
         {
             $this->backup();
 
+            // Get all draft pages with all draft files referenced in those pages
             $draftResources = $this->draftResources();
 
-            $publicResources = $this->listScPaths();
+            foreach($draftResources as $no => $file)
+            {
+                // Overwrite live file with draft only if draft actually exists
+                if($this->fs->has($file))
+                {
+                    $publicPath = $this->_stripDraftPath($file);
+                    if($this->fs->has($publicPath))
+                    {
+                        $this->fs->delete($publicPath);
+                    }
+                    $this->fs->copy($file, $publicPath);
+                }
+            }
 
-            $this->fs->deletePaths($publicResources);
-            $this->fs->copyPaths($draftResources, $this->draftPath(), '');
             $this->cleanupPublic();
             $this->saveLastPublished();
             $this->markDraftClean();
@@ -1379,6 +1390,7 @@ class Site
 
             // Remove draft path prefix from resources and add relative prefix if page file or
             // webroot relative path prefix if include file
+            // TODO: write comment why we are making difference here
             if($this->isPageFile($pagePath))
             {
                 // For page files we need to add ../ to resource links if needed
