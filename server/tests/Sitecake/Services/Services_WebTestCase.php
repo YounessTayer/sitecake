@@ -5,12 +5,16 @@ namespace Sitecake\Services;
 use League\Flysystem\Filesystem;
 use Silex\WebTestCase;
 use Sitecake\SessionManager;
+use Sitecake\Site;
 use Symfony\Component\HttpKernel\Client;
 
 abstract class Services_WebTestCase extends WebTestCase
 {
     private $__execDir;
 
+    /**
+     * @var Site
+     */
     protected $_site;
 
     /**

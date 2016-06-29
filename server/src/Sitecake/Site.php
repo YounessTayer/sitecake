@@ -822,6 +822,8 @@ class Site
 
             // Get all draft pages with all draft files referenced in those pages
             $draftResources = $this->draftResources();
+            // Get public resource paths so we can check if there are any public resources that should be deleted
+            $publicResources = $this->listScPaths();
 
             foreach($draftResources as $no => $file)
             {
@@ -832,9 +834,15 @@ class Site
                     if($this->fs->has($publicPath))
                     {
                         $this->fs->delete($publicPath);
+                        array_splice($publicResources, array_search($publicPath, $publicResources), 1);
                     }
                     $this->fs->copy($file, $publicPath);
                 }
+            }
+            
+            if(!empty($publicResources))
+            {
+                $this->fs->deletePaths($publicResources);
             }
 
             $this->cleanupPublic();

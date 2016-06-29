@@ -5,13 +5,14 @@ namespace Sitecake\Services\Content;
 use Silex\Application;
 use Sitecake\Exception\Http\BadRequestException;
 use Sitecake\Services\Service;
+use Sitecake\Site;
 
 class ContentService extends Service
 {
 	/**
-	 * @var Application
+	 * @var Site
 	 */
-	protected $_ctx;
+	protected $_site;
 
 	/**
 	 * @var Content
@@ -20,8 +21,8 @@ class ContentService extends Service
 
 	public function __construct($ctx)
 	{
-		$this->_ctx = $ctx;
-		$this->_content = new Content($ctx['site']);
+		$this->_site = $ctx['site'];
+		$this->_content = new Content($this->_site);
 	}
 
 	public function save($request)
@@ -41,7 +42,7 @@ class ContentService extends Service
 
 	public function publish($request)
 	{
-		$this->_ctx['site']->publishDraft();
+		$this->_site->publishDraft();
 
 		return $this->json($request, ['status' => 0]);
 	}
