@@ -17,20 +17,20 @@ class Site
     const RESOURCE_TYPE_IMAGE = 'image';
     const RESOURCE_TYPE_FILE = 'file';
 
-    protected $ctx;
+    protected $_config;
 
     /**
      * @var FilesystemInterface
      */
-    protected $fs;
+    protected $_fs;
 
-    protected $tmp;
+    protected $_tmp;
 
-    protected $draft;
+    protected $_draft;
 
-    protected $backup;
+    protected $_backup;
 
-    protected $ignores;
+    protected $_ignores;
 
     protected $_pageFiles;
 
@@ -59,14 +59,14 @@ class Site
         'menus' => []
     ];
 
-    public function __construct(FilesystemInterface $fs, $ctx)
+    public function __construct(FilesystemInterface $fs, $config)
     {
-        $this->ctx = $ctx;
-        $this->fs = $fs;
+        $this->_config = $config;
+        $this->_fs = $fs;
 
         $this->__ensureDirs();
 
-        $this->ignores = [];
+        $this->_ignores = [];
         $this->__loadIgnorePatterns();
 
         $this->loadMetadata();
@@ -77,7 +77,7 @@ class Site
         // check/create directory images
         try
         {
-            if (!$this->fs->ensureDir('images'))
+            if (!$this->_fs->ensureDir('images'))
             {
                 throw new LogicException('Could not ensure that the directory /images is present and writtable.');
             }
@@ -89,7 +89,7 @@ class Site
         // check/create files
         try
         {
-            if (!$this->fs->ensureDir('files'))
+            if (!$this->_fs->ensureDir('files'))
             {
                 throw new LogicException('Could not ensure that the directory /files is present and writtable.');
             }
@@ -101,7 +101,7 @@ class Site
         // check/create sitecake-temp
         try
         {
-            if (!$this->fs->ensureDir('sitecake-temp'))
+            if (!$this->_fs->ensureDir('sitecake-temp'))
             {
                 throw new LogicException('Could not ensure that the directory /sitecake-temp is present and writable.');
             }
@@ -113,7 +113,7 @@ class Site
         // check/create sitecake-temp/<workid>
         try
         {
-            $work = $this->fs->randomDir('sitecake-temp');
+            $work = $this->_fs->randomDir('sitecake-temp');
             if ($work === false)
             {
                 throw new LogicException('Could not ensure that the work directory in /sitecake-temp is present and writtable.');
@@ -126,8 +126,8 @@ class Site
         // check/create sitecake-temp/<workid>/tmp
         try
         {
-            $this->tmp = $this->fs->ensureDir($work . '/tmp');
-            if ($this->tmp === false)
+            $this->_tmp = $this->_fs->ensureDir($work . '/tmp');
+            if ($this->_tmp === false)
             {
                 throw new LogicException('Could not ensure that the directory ' . $work .
                                          '/tmp is present and writtable.');
@@ -140,8 +140,8 @@ class Site
         // check/create sitecake-temp/<workid>/draft
         try
         {
-            $this->draft = $this->fs->ensureDir($work . '/draft');
-            if ($this->draft === false)
+            $this->_draft = $this->_fs->ensureDir($work . '/draft');
+            if ($this->_draft === false)
             {
                 throw new LogicException('Could not ensure that the directory ' . $work .
                                          '/draft is present and writtable.');
@@ -156,7 +156,7 @@ class Site
         // check/create sitecake-backup
         try
         {
-            if (!$this->fs->ensureDir('sitecake-backup'))
+            if (!$this->_fs->ensureDir('sitecake-backup'))
             {
                 throw new LogicException('Could not ensure that the directory /sitecake-backup is present and writtable.');
             }
@@ -168,7 +168,7 @@ class Site
         // check/create sitecake-backup/<workid>
         try
         {
-            $this->backup = $this->fs->randomDir('sitecake-backup');
+            $this->_backup = $this->_fs->randomDir('sitecake-backup');
             if ($work === false)
             {
                 throw new LogicException('Could not ensure that the work directory in /sitecake-backup is present and writtable.');
@@ -182,16 +182,16 @@ class Site
 
     private function __loadIgnorePatterns()
     {
-        if ($this->fs->has('.scignore'))
+        if ($this->_fs->has('.scignore'))
         {
-            $this->ignores = preg_split('/\R/', $this->fs->read('.scignore'));
+            $this->_ignores = preg_split('/\R/', $this->_fs->read('.scignore'));
         }
-        $this->ignores = array_filter(array_merge($this->ignores, [
+        $this->_ignores = array_filter(array_merge($this->_ignores, [
             '.scignore',
             '.scpages',
             'draft.drt',
             'draft.mkr',
-            $this->ctx['entry_point_file_name'],
+            $this->_config['entry_point_file_name'],
             'sitecake/',
             'sitecake-temp/',
             'sitecake-backup/'
@@ -220,18 +220,18 @@ class Site
         $extensions = $this->getValidPageExtensions();
 
         // List all pages in document root
-        $pageFilePaths = $this->fs->listPatternPaths('',
+        $pageFilePaths = $this->_fs->listPatternPaths('',
             '/^.*\.(' . implode('|', $extensions) . ')?$/');
 
         // If .scpages file present we need to add page files stated inside and filter out ones that starts with !
-        if ($this->fs->has('.scpages'))
+        if ($this->_fs->has('.scpages'))
         {
-            $scPages = $this->fs->read('.scpages');
+            $scPages = $this->_fs->read('.scpages');
 
             if(!empty($scPages))
             {
                 // Load page life paths from .scpages
-                $scPagePaths = preg_split('/\R/', $this->fs->read('.scpages'));
+                $scPagePaths = preg_split('/\R/', $this->_fs->read('.scpages'));
 
                 foreach ($scPagePaths as $no => $path)
                 {
@@ -254,7 +254,7 @@ class Site
                     // Read directory pages if directory is passed in .scpages
                     if (($noTrailingSlash = $path[ strlen($path) - 1 ]) == '/')
                     {
-                        $pageFilePaths = array_merge($scPagePaths, $this->fs->listPatternPaths(
+                        $pageFilePaths = array_merge($scPagePaths, $this->_fs->listPatternPaths(
                             $noTrailingSlash,
                             '/^.*\.(' . implode('|', $extensions) . ')?$/'
                         ));
@@ -278,9 +278,9 @@ class Site
 
     public function getValidPageExtensions()
     {
-        $defaultPages = is_array($this->ctx['site.default_pages']) ?
-            $this->ctx['site.default_pages'] :
-            [$this->ctx['site.default_pages']];
+        $defaultPages = is_array($this->_config['site.default_pages']) ?
+            $this->_config['site.default_pages'] :
+            [$this->_config['site.default_pages']];
 
         return Utils::map(function ($pageName)
         {
@@ -295,7 +295,7 @@ class Site
      */
     public function tmpPath()
     {
-        return $this->tmp;
+        return $this->_tmp;
     }
 
     /**
@@ -304,7 +304,7 @@ class Site
      */
     public function draftPath()
     {
-        return $this->draft;
+        return $this->_draft;
     }
 
     protected function _draftBaseUrl()
@@ -323,13 +323,13 @@ class Site
      */
     public function backupPath()
     {
-        return $this->backup;
+        return $this->_backup;
     }
 
     public function pageFileUrl($path)
     {
         $base = $this->_base();
-        if(!empty($this->ctx['pages.use_document_relative_paths']) && strpos($path, $base) !== 0)
+        if(!empty($this->_config['pages.use_document_relative_paths']) && strpos($path, $base) !== 0)
         {
             return $this->_base() . $path;
         }
@@ -358,9 +358,9 @@ class Site
     {
         $self = $_SERVER['PHP_SELF'];
 
-        if(strpos($self, '/' . $this->ctx['SERVICE_URL']) === 0)
+        if(strpos($self, '/' . $this->_config['SERVICE_URL']) === 0)
         {
-            $base = str_replace('/' . $this->ctx['SERVICE_URL'], '', $self);
+            $base = str_replace('/' . $this->_config['SERVICE_URL'], '', $self);
         }
         else
         {
@@ -380,7 +380,7 @@ class Site
 
     public function getBase()
     {
-        if(!empty($this->ctx['pages.use_document_relative_paths']))
+        if(!empty($this->_config['pages.use_document_relative_paths']))
         {
             return $this->_base();
         }
@@ -416,15 +416,15 @@ class Site
      */
     public function listScPaths($directory = '', $type = self::RESOURCE_TYPE_ALL)
     {
-        $ignores = $this->ignores;
+        $ignores = $this->_ignores;
 
         return array_filter(array_merge(
             (in_array($type, [self::RESOURCE_TYPE_ALL, self::RESOURCE_TYPE_PAGE]) ?
                 $this->_findSourceFiles($directory) : []),
             (in_array($type, [self::RESOURCE_TYPE_ALL, self::RESOURCE_TYPE_RESOURCE, self::RESOURCE_TYPE_IMAGE]) ?
-                $this->fs->listPatternPaths(ltrim($directory . '/images', '/'), '/^.*\-sc[0-9a-f]{13}[^\.]*\..+$/', true) : []),
+                $this->_fs->listPatternPaths(ltrim($directory . '/images', '/'), '/^.*\-sc[0-9a-f]{13}[^\.]*\..+$/', true) : []),
             (in_array($type, [self::RESOURCE_TYPE_ALL, self::RESOURCE_TYPE_RESOURCE, self::RESOURCE_TYPE_FILE]) ?
-                $this->fs->listPatternPaths(ltrim($directory . '/files', '/'), '/^.*\-sc[0-9a-f]{13}[^\.]*\..+$/', true) : [])),
+                $this->_fs->listPatternPaths(ltrim($directory . '/files', '/'), '/^.*\-sc[0-9a-f]{13}[^\.]*\..+$/', true) : [])),
             function ($path) use ($ignores, $directory)
             {
                 foreach ($ignores as $ignore)
@@ -449,14 +449,14 @@ class Site
         $extensions = $this->getValidPageExtensions();
 
         // List first level files for passed directory
-        $firstLevel = $this->fs->listContents($directory);
+        $firstLevel = $this->_fs->listContents($directory);
 
         $paths = [];
 
         foreach ($firstLevel as $file)
         {
-            if (($file['type'] == 'dir' && !in_array($file['path'] . '/', $this->ignores)) ||
-                ($file['type'] == 'file' && !in_array($file['basename'], $this->ignores) &&
+            if (($file['type'] == 'dir' && !in_array($file['path'] . '/', $this->_ignores)) ||
+                ($file['type'] == 'file' && !in_array($file['basename'], $this->_ignores) &&
                  preg_match('/^.*\.(' . implode('|', $extensions) . ')?$/', $file['basename']) === 1)
             )
             {
@@ -464,7 +464,7 @@ class Site
                 {
                     $paths = array_merge(
                         $paths,
-                        $this->fs->listPatternPaths($file['path'], '/^.*\.(' . implode('|', $extensions) . ')?$/', true)
+                        $this->_fs->listPatternPaths($file['path'], '/^.*\.(' . implode('|', $extensions) . ')?$/', true)
                     );
                 }
                 else
@@ -551,16 +551,16 @@ class Site
 
     public function getDefaultPage($directory = '')
     {
-        return new Page($this->fs->read($this->_getDefaultIndex($directory)));
+        return new Page($this->_fs->read($this->_getDefaultIndex($directory)));
     }
 
     protected function _getDefaultIndex($directory = '')
     {
         $paths = $this->listScPagesPaths($directory);
 
-        $defaultPages = is_array($this->ctx['site.default_pages']) ?
-            $this->ctx['site.default_pages'] :
-            [$this->ctx['site.default_pages']];
+        $defaultPages = is_array($this->_config['site.default_pages']) ?
+            $this->_config['site.default_pages'] :
+            [$this->_config['site.default_pages']];
         foreach ($defaultPages as $defaultPage)
         {
             $dir = $directory ? rtrim($directory, '/') . '/' : '';
@@ -583,7 +583,7 @@ class Site
         $pagePath = $this->_getDefaultIndex();
         if (in_array($pagePath, $publicPagePaths))
         {
-            $draft = new Draft($this->fs->read($pagePath));
+            $draft = new Draft($this->_fs->read($pagePath));
 
             // Normalize resource URLs
             $draft->normalizeResourcePaths($this->_base());
@@ -624,7 +624,7 @@ class Site
         {
             $pagePath = $this->_draftBaseUrl() . $uri;
 
-            if ($this->fs->has($pagePath) && $this->fs->get($pagePath) instanceof Directory)
+            if ($this->_fs->has($pagePath) && $this->_fs->get($pagePath) instanceof Directory)
             {
                 $pagePath = $this->_getDefaultIndex($pagePath);
             }
@@ -643,9 +643,9 @@ class Site
         if (in_array($pagePath, $draftPagePaths))
         {
             // Move execution to directory where requested page is because of php includes
-            chdir($this->fs->getAdapter()->applyPathPrefix($executionDirectory));
+            chdir($this->_fs->getAdapter()->applyPathPrefix($executionDirectory));
 
-            $draft = new Draft($this->fs->read($pagePath));
+            $draft = new Draft($this->_fs->read($pagePath));
 
             // Normalize resource URLs
             $draft->normalizeResourcePaths($this->_base());
@@ -678,7 +678,7 @@ class Site
         {
             array_push($pages, [
                 'path' => $pagePath,
-                'page' => new Page($this->fs->read($pagePath))
+                'page' => new Page($this->_fs->read($pagePath))
             ]);
         }
 
@@ -689,14 +689,14 @@ class Site
     {
         $this->loadMetadata();
         $this->markDraftDirty();
-        $this->fs->update($path, (string)$page);
+        $this->_fs->update($path, (string)$page);
         $this->saveLastModified($path);
     }
 
     public function updatePage($path, $pageDetails)
     {
         $path = $this->_draftBaseUrl() . $path;
-        if(!$this->fs->has($path))
+        if(!$this->_fs->has($path))
         {
             throw new FileNotFoundException([
                 'type' => 'Source Page',
@@ -704,7 +704,7 @@ class Site
             ], 401);
         }
 
-        $page = new Page($this->fs->read($path));
+        $page = new Page($this->_fs->read($path));
 
         $page->setPageTitle($pageDetails['title']);
         $page->setPageDescription($pageDetails['desc']);
@@ -719,13 +719,13 @@ class Site
         {
             $path = $this->_draftBaseUrl() . $page['path'];
 
-            if($this->fs->has($path))
+            if($this->_fs->has($path))
             {
-                $this->fs->update($path, (string)$page['page']);
+                $this->_fs->update($path, (string)$page['page']);
             }
             else
             {
-                $this->fs->write($path, (string)$page['page']);
+                $this->_fs->write($path, (string)$page['page']);
             }
             // Update last modified time in metadata
             $this->saveLastModified($path);
@@ -755,7 +755,7 @@ class Site
 
         $draftPath = $this->_draftBaseUrl() . $sourcePath;
 
-        if(empty($sourcePath) || !$this->fs->has($draftPath))
+        if(empty($sourcePath) || !$this->_fs->has($draftPath))
         {
             throw new FileNotFoundException([
                 'type' => 'Source Page',
@@ -763,7 +763,7 @@ class Site
             ], 401);
         }
 
-        $page = new Page($this->fs->read($draftPath));
+        $page = new Page($this->_fs->read($draftPath));
 
         // Clear old container names
         $page->cleanupContainerNames();
@@ -795,7 +795,7 @@ class Site
             }
             $newPath = Utils::resurl($resourceDetails['path'], $resourceDetails['name'], $id,
                 $resourceDetails['subid'], $resourceDetails['ext']);
-            $this->fs->put($newPath, $this->fs->read($resource));
+            $this->_fs->put($newPath, $this->_fs->read($resource));
             $page->updateResourcePath($resource, $newPath);
         }
 
@@ -810,7 +810,7 @@ class Site
         foreach ($paths as $path)
         {
             $path = $this->_draftBaseUrl() . $path;
-            $this->fs->delete($path);
+            $this->_fs->delete($path);
         }
     }
 
@@ -828,21 +828,21 @@ class Site
             foreach($draftResources as $no => $file)
             {
                 // Overwrite live file with draft only if draft actually exists
-                if($this->fs->has($file))
+                if($this->_fs->has($file))
                 {
                     $publicPath = $this->_stripDraftPath($file);
-                    if($this->fs->has($publicPath))
+                    if($this->_fs->has($publicPath))
                     {
-                        $this->fs->delete($publicPath);
+                        $this->_fs->delete($publicPath);
                         array_splice($publicResources, array_search($publicPath, $publicResources), 1);
                     }
-                    $this->fs->copy($file, $publicPath);
+                    $this->_fs->copy($file, $publicPath);
                 }
             }
             
             if(!empty($publicResources))
             {
-                $this->fs->deletePaths($publicResources);
+                $this->_fs->deletePaths($publicResources);
             }
 
             $this->cleanupPublic();
@@ -853,22 +853,22 @@ class Site
 
     public function isDraftClean()
     {
-        return !$this->fs->has($this->draftDirtyMarkerPath());
+        return !$this->_fs->has($this->draftDirtyMarkerPath());
     }
 
     public function markDraftDirty()
     {
-        if (!$this->fs->has($this->draftDirtyMarkerPath()))
+        if (!$this->_fs->has($this->draftDirtyMarkerPath()))
         {
-            $this->fs->write($this->draftDirtyMarkerPath(), '');
+            $this->_fs->write($this->draftDirtyMarkerPath(), '');
         }
     }
 
     public function markDraftClean()
     {
-        if ($this->fs->has($this->draftDirtyMarkerPath()))
+        if ($this->_fs->has($this->draftDirtyMarkerPath()))
         {
-            $this->fs->delete($this->draftDirtyMarkerPath());
+            $this->_fs->delete($this->draftDirtyMarkerPath());
         }
     }
 
@@ -884,7 +884,7 @@ class Site
 
     protected function draftExists()
     {
-        return $this->fs->has($this->draftMarkerPath());
+        return $this->_fs->has($this->draftMarkerPath());
     }
 
     /**
@@ -900,7 +900,7 @@ class Site
         {
             if ($this->draftExists())
             {
-                $this->_metadata = @unserialize($this->fs->read($this->draftMarkerPath()));
+                $this->_metadata = @unserialize($this->_fs->read($this->draftMarkerPath()));
 
                 if ($this->_metadata === null)
                 {
@@ -940,7 +940,7 @@ class Site
             $this->_metadata['files'][$filePath] = [];
         }
 
-        $meta = $this->fs->getMetadata($path);
+        $meta = $this->_fs->getMetadata($path);
 
         $this->_metadata['files'][$filePath][$index] = $meta['timestamp'];
 
@@ -972,9 +972,9 @@ class Site
     {
         if($this->draftExists())
         {
-            return $this->fs->update($this->draftMarkerPath(), serialize($this->_metadata));
+            return $this->_fs->update($this->draftMarkerPath(), serialize($this->_metadata));
         }
-        return $this->fs->write($this->draftMarkerPath(), serialize($this->_metadata));
+        return $this->_fs->write($this->draftMarkerPath(), serialize($this->_metadata));
     }
 
     /**
@@ -1035,7 +1035,7 @@ class Site
                 unset($draftPaths[$index]);
             }
 
-            if (!$this->fs->has($draftPath))
+            if (!$this->_fs->has($draftPath))
             {
                 // This is a new resource/page and should be copied to draft
                 $this->_createDraftResource($path);
@@ -1043,7 +1043,7 @@ class Site
             else
             {
                 // Get public file metadata
-                $pageMetadata = $this->fs->getMetadata($path);
+                $pageMetadata = $this->_fs->getMetadata($path);
 
                 if (isset($this->_metadata['files'][ $path ][0]))
                 {
@@ -1053,35 +1053,35 @@ class Site
                         if(!$this->isResourcePath($path))
                         {
                             // Initialize Page to check if it's editable or has menus
-                            $page = new Page($this->fs->read($path));
+                            $page = new Page($this->_fs->read($path));
 
                             if($page->isEditable() || $this->hasMenu($page))
                             {
-                                if ($isDraftClean || $this->ctx['pages.prioritize_manual_changes'])
+                                if ($isDraftClean || $this->_config['pages.prioritize_manual_changes'])
                                 {
-                                    $this->fs->delete($draftPath);
+                                    $this->_fs->delete($draftPath);
                                     $this->_createDraftResource($path);
                                 }
                             }
                             else
                             {
-                                $this->fs->delete($draftPath);
+                                $this->_fs->delete($draftPath);
                                 $this->_createDraftResource($path);
                             }
                         }
                         else
                         {
-                            $this->fs->delete($draftPath);
-                            $this->fs->copy($path, $draftPath);
+                            $this->_fs->delete($draftPath);
+                            $this->_fs->copy($path, $draftPath);
                         }
                     }
                 }
                 else
                 {
-                    $draftMetadata = $this->fs->getMetadata($draftPath);
+                    $draftMetadata = $this->_fs->getMetadata($draftPath);
                     if($isDraftClean || ($this->_metadata['lastPublished'] > $draftMetadata['timestamp']))
                     {
-                        $this->fs->delete($draftPath);
+                        $this->_fs->delete($draftPath);
                         $this->_createDraftResource($path);
                     }
 
@@ -1094,11 +1094,11 @@ class Site
             }
         }
 
-        if(!empty($draftPaths) && ($isDraftClean || $this->ctx['pages.prioritize_manual_changes']))
+        if(!empty($draftPaths) && ($isDraftClean || $this->_config['pages.prioritize_manual_changes']))
         {
             foreach($draftPaths as $draftPath)
             {
-                $this->fs->delete($draftPath);
+                $this->_fs->delete($draftPath);
             }
         }
 
@@ -1112,16 +1112,16 @@ class Site
     {
         // Copy page/resource to draft dir
         $draftPath = $this->_draftBaseUrl() . $path;
-        $this->fs->copy($path, $draftPath);
+        $this->_fs->copy($path, $draftPath);
 
         // Get file metadata
-        $pageMetadata = $this->fs->getMetadata($path);
+        $pageMetadata = $this->_fs->getMetadata($path);
 
         // This is a Page. Create draft and process it
         if (!$this->isResourcePath($path))
         {
             // Initialize Page
-            $page = new Page($this->fs->read($draftPath));
+            $page = new Page($this->_fs->read($draftPath));
 
             if($page->isEditable())
             {
@@ -1133,7 +1133,7 @@ class Site
             $page->prefixResourceUrls($this->_draftBaseUrl(), $this->getBase());
 
             // Update draft file content
-            $this->fs->update($draftPath, (string)$page);
+            $this->_fs->update($draftPath, (string)$page);
 
             // Check for existing navigation in current page and store it if found
             if($this->hasMenu($page))
@@ -1160,7 +1160,7 @@ class Site
             }
         }
 
-        $draftMetadata = $this->fs->getMetadata($draftPath);
+        $draftMetadata = $this->_fs->getMetadata($draftPath);
 
         // Remember last modification times
         $this->_metadata['files'][ $path ] = [
@@ -1187,7 +1187,7 @@ class Site
                 {
                     $url = $this->pageFilePath($item['url']);
                     $url = empty($url) ? $this->_getDefaultIndex() : $url;
-                    if ($this->fs->has($url) && $this->fs->get($url) instanceof Directory)
+                    if ($this->_fs->has($url) && $this->_fs->get($url) instanceof Directory)
                     {
                         $url = $this->_getDefaultIndex($url);
                     }
@@ -1283,7 +1283,7 @@ class Site
         {
             $path = $this->_draftBaseUrl() . $path;
 
-            $page = new Page($this->fs->read($path));
+            $page = new Page($this->_fs->read($path));
 
             foreach($page->query('[class*="' . Menu::SC_MENU_BASE_CLASS . '"]') as $menu)
             {
@@ -1310,13 +1310,13 @@ class Site
 
                 $page->findAndReplace(
                     Menu::SC_MENU_BASE_CLASS . ($name == 'main' ? '' : '-' . $name),
-                    $menu->render($this->ctx['pages.nav.item_template'], function($url) use ($path) {
+                    $menu->render($this->_config['pages.nav.item_template'], function($url) use ($path) {
                         return $this->pageFileUrl($path) == $url;
-                    }, $this->ctx['pages.nav.active_class'])
+                    }, $this->_config['pages.nav.active_class'])
                 );
             }
 
-            $this->fs->update($path, (string)$page);
+            $this->_fs->update($path, (string)$page);
 
             // Update last modified time in metadata
             $this->saveLastModified($path);
@@ -1325,8 +1325,8 @@ class Site
 
     protected function removeDraft()
     {
-        $this->fs->deletePaths($this->listScPaths($this->draftPath()));
-        $this->fs->delete($this->draftMarkerPath());
+        $this->_fs->deletePaths($this->listScPaths($this->draftPath()));
+        $this->_fs->delete($this->draftMarkerPath());
     }
 
     protected function newBackupContainerPath()
@@ -1341,7 +1341,7 @@ class Site
      */
     protected function cleanupBackup()
     {
-        $backups = $this->fs->listContents($this->backupPath());
+        $backups = $this->_fs->listContents($this->backupPath());
         usort($backups, function ($a, $b)
         {
             if ($a['timestamp'] < $b['timestamp'])
@@ -1360,9 +1360,9 @@ class Site
         $backups = array_reverse($backups);
         foreach ($backups as $idx => $backup)
         {
-            if ($idx >= $this->ctx['site.number_of_backups'])
+            if ($idx >= $this->_config['site.number_of_backups'])
             {
-                $this->fs->deleteDir($backup['path']);
+                $this->_fs->deleteDir($backup['path']);
             }
         }
     }
@@ -1370,10 +1370,10 @@ class Site
     public function backup()
     {
         $backupPath = $this->newBackupContainerPath();
-        $this->fs->createDir($backupPath);
-        $this->fs->createDir($backupPath . '/images');
-        $this->fs->createDir($backupPath . '/files');
-        $this->fs->copyPaths($this->listScPaths(), '', $backupPath);
+        $this->_fs->createDir($backupPath);
+        $this->_fs->createDir($backupPath . '/images');
+        $this->_fs->createDir($backupPath . '/files');
+        $this->_fs->copyPaths($this->listScPaths(), '', $backupPath);
         $this->cleanupBackup();
     }
 
@@ -1388,7 +1388,7 @@ class Site
         $pagePaths = $this->listScPagesPaths();
         foreach ($pagePaths as $pagePath)
         {
-            $page = new Page($this->fs->read($pagePath));
+            $page = new Page($this->_fs->read($pagePath));
 
             if($page->isEditable())
             {
@@ -1411,7 +1411,7 @@ class Site
             }
 
             // Update source
-            $this->fs->update($pagePath, (string)$page);
+            $this->_fs->update($pagePath, (string)$page);
 
             // Update last modified time in metadata
             $this->saveLastModified($pagePath);
@@ -1426,7 +1426,7 @@ class Site
         {
             if (!in_array($resource, $draftResources))
             {
-                $this->fs->delete($resource);
+                $this->_fs->delete($resource);
             }
         }
     }
@@ -1437,7 +1437,7 @@ class Site
         $resources = array_merge([], $draftPagePaths);
         foreach ($draftPagePaths as $pagePath)
         {
-            $page = new Page($this->fs->read($pagePath), false);
+            $page = new Page($this->_fs->read($pagePath), false);
             $resources = array_merge($resources, $page->listResourceUrls());
         }
 
