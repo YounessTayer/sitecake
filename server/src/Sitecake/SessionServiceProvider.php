@@ -107,6 +107,20 @@ class SessionServiceProvider extends Provider
             {
                 $app['session.storage.save_path'] = $app['session.options']['save_path'];
             }
+            else
+            {
+                // Check if php have privileges to write into session storage path, if not set it to sitecake-temp
+                $savePath = ini_get('session.save_path');
+                if(empty($savePath) || !is_writable($savePath))
+                {
+                    $savePath = $app['BASE_DIR'] . DIRECTORY_SEPARATOR . $app['site']->tmpPath();
+                    if(DIRECTORY_SEPARATOR !== '/')
+                    {
+                        $savePath = str_replace('/', DIRECTORY_SEPARATOR, $savePath);
+                    }
+                    $app['session.storage.save_path'] = $savePath;
+                }
+            }
 
             $app['session.storage.options'] = $app['session.options'];
         }

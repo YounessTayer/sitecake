@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="SiteCake" default="build" basedir="." description="SiteCake CMS">
-	<property name="version" value="2.3.5dev"/>
+
+	<loadfile property="version" file="VERSION.txt">
+		<filterchain>
+			<striplinecomments>
+				<comment value="#" />
+			</striplinecomments>
+			<striplinebreaks />
+		</filterchain>
+	</loadfile>
 	<property name="scedit.version" value="${version}"/>
 
 	<property name="build.dir" value="./build"/>

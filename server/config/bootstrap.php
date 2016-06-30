@@ -106,6 +106,13 @@ if(!isset($app['log']) || $app['log'] !== false)
     Sitecake\Log\Log::init($app['logger']);
 }
 
+// Set site manager (initialized before session provider because session provider is using it
+// if custom session storage path needs to be set)
+$app['site'] = $app->share(function ($app)
+{
+    return new Sitecake\Site($app['fs'], $app);
+});
+
 // Register session provider
 $app->register(new Sitecake\SessionServiceProvider());
 
@@ -127,27 +134,25 @@ $app['translator'] = $app->share($app->extend('translator', function ($translato
     return $translator;
 }));
 
-// Set Auth
+// Set Auth handler
 $app['auth'] = $app->share(function ($app)
 {
     return new Sitecake\Auth\Auth($app['fs'], $app['CREDENTIALS_PATH']);
 });
 
-$app['site'] = $app->share(function ($app)
-{
-    return new Sitecake\Site($app['fs'], $app);
-});
-
+// Set file lock handler
 $app['flock'] = $app->share(function ($app)
 {
     return new Sitecake\FileLock($app['fs'], $app['site']->tmpPath());
 });
 
+// Set session manager
 $app['sm'] = $app->share(function ($app)
 {
     return new Sitecake\SessionManager($app['session'], $app['flock'], $app['auth'], $app['site']);
 });
 
+// Set Renderer
 $app['renderer'] = $app->share(function ($app)
 {
     return new Sitecake\Renderer($app['site'], $app);
