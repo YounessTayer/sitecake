@@ -223,6 +223,13 @@ class Site
         $pageFilePaths = $this->_fs->listPatternPaths('',
             '/^.*\.(' . implode('|', $extensions) . ')?$/');
 
+        // Filter out entry point file
+        if(($index = array_search($this->_config['entry_point_file_name'], $pageFilePaths)) !== false)
+        {
+            array_splice($pageFilePaths, $index, 1);
+            $pageFilePaths = array_values($pageFilePaths);
+        }
+
         // If .scpages file present we need to add page files stated inside and filter out ones that starts with !
         if ($this->_fs->has('.scpages'))
         {
@@ -551,10 +558,10 @@ class Site
 
     public function getDefaultPage($directory = '')
     {
-        return new Page($this->_fs->read($this->_getDefaultIndex($directory)));
+        return new Page($this->_fs->read($this->getDefaultIndex($directory)));
     }
 
-    protected function _getDefaultIndex($directory = '')
+    public function getDefaultIndex($directory = '')
     {
         $paths = $this->listScPagesPaths($directory);
 
@@ -580,7 +587,7 @@ class Site
     public function getDefaultPublicPage()
     {
         $publicPagePaths = $this->listScPagesPaths();
-        $pagePath = $this->_getDefaultIndex();
+        $pagePath = $this->getDefaultIndex();
         if (in_array($pagePath, $publicPagePaths))
         {
             $draft = new Draft($this->_fs->read($pagePath));
@@ -626,12 +633,12 @@ class Site
 
             if ($this->_fs->has($pagePath) && $this->_fs->get($pagePath) instanceof Directory)
             {
-                $pagePath = $this->_getDefaultIndex($pagePath);
+                $pagePath = $this->getDefaultIndex($pagePath);
             }
         }
         else
         {
-            $pagePath = $this->_getDefaultIndex($this->draftPath());
+            $pagePath = $this->getDefaultIndex($this->draftPath());
         }
 
         // Check if we need to change execution directory
@@ -1186,10 +1193,10 @@ class Site
                 foreach($menuItems as $no => $item)
                 {
                     $url = $this->pageFilePath($item['url']);
-                    $url = empty($url) ? $this->_getDefaultIndex() : $url;
+                    $url = empty($url) ? $this->getDefaultIndex() : $url;
                     if ($this->_fs->has($url) && $this->_fs->get($url) instanceof Directory)
                     {
-                        $url = $this->_getDefaultIndex($url);
+                        $url = $this->getDefaultIndex($url);
                     }
 
                     if ($path == $url)

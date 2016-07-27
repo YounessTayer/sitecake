@@ -95,8 +95,6 @@ class Pages {
 
 		// Update page files and menus
 		$this->site->updatePageFiles($pages, $metadata);
-
-		return array_values($metadata);
 	}
 
 	public function read() {

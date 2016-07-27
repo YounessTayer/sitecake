@@ -2,7 +2,6 @@
 
 namespace Sitecake\Services\Pages;
 
-use Sitecake\Exception\MissingArgumentsException;
 use Sitecake\Services\Service;
 
 class PagesService extends Service {
@@ -26,21 +25,12 @@ class PagesService extends Service {
 
 	public function pages($request)
 	{
-		//return $this->json($request, array('status' => 0, 'pages' => []), 200);
+        $pageUpdates = $request->request->get('pages');
+        if (!is_null($pageUpdates))
+        {
+            $this->pages->update(json_decode($pageUpdates, true));
+        }
+
 		return $this->json($request, array('status' => 0, 'pages' => array_values($this->pages->listPages())), 200);
 	}
-
-	public function save($request)
-	{
-		$pageUpdates = $request->request->get('pages');
-		if (is_null($pageUpdates))
-		{
-			throw new MissingArgumentsException(['name'=>'pages'], 400);
-		}
-
-		$this->pages->update(json_decode($pageUpdates, true));
-
-		return $this->json($request, array('status' => 0), 200);
-	}
-
 }
