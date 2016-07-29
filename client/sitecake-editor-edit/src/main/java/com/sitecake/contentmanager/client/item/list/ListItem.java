@@ -411,7 +411,7 @@ public abstract class ListItem extends ContentEditableBaseItem implements Editab
 						if (prev.getNodeType() == Node.ELEMENT_NODE &&
 								"br".equalsIgnoreCase(Element.as(prev).getTagName()) &&
 								Element.as(prev).hasAttribute("_moz_dirty")) {
-								prev.getParentElement().removeChild(prev);
+								//prev.getParentElement().removeChild(prev);
 						} else {
 							break;
 						}
