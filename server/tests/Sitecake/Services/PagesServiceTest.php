@@ -68,7 +68,7 @@ class PagesServiceTest extends Services_WebTestCase
         $indexID = $pages['index.php']['id'];
         $subDirID = $pages['subdir/index.php']['id'];
 
-        $client->request('POST', '/?service=_pages&action=save', [
+        $client->request('POST', '/?service=_pages&action=pages', [
             'pages' => json_encode([
                 // new page from index.php
                 [

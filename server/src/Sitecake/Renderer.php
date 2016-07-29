@@ -84,7 +84,8 @@ class Renderer
                    'phpVersion: "' . phpversion() . '@' . PHP_OS . '", ' .
                    'serviceUrl: "' . $this->_options['SERVICE_URL'] . '", ' .
                    'configUrl: "' . $this->_options['EDITOR_CONFIG_URL'] . '", ' .
-                   'draftPublished: ' . ($published ? 'true' : 'false') .
+                   'draftPublished: ' . ($published ? 'true' : 'false') . ', ' .
+                   'indexPageName: "' . $this->_site->getDefaultIndex() . '"' .
                    '};';
 
         return HtmlUtils::wrapToScriptTag($globals) .

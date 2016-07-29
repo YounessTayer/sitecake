@@ -73,6 +73,7 @@ class RendererTest extends Services_WebTestCase
         $this->assertRegExp('/configUrl\s?:\s?\"' . preg_quote($this->app['EDITOR_CONFIG_URL'], '/') . '\",/',
             $scVariables);
         $this->assertRegExp('/draftPublished\s?:\s?true/', $scVariables);
+        $this->assertRegExp('/indexPageName\s?:\s?\"index.php\"/', $scVariables);
 
         // Assert editor inclusion
         $this->assertEquals($this->app['EDITOR_EDIT_URL'],
