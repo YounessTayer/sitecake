@@ -139,7 +139,7 @@ public abstract class ListItem extends ContentEditableBaseItem implements Editab
 		HandlerRegistration keyDownHandlerRegistration = addKeyDownHandler(new KeyDownHandler() {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
-				onKeyDownEvent(event);
+				//onKeyDownEvent(event);
 			}
 		});
 		handlerRegistrations.add(keyDownHandlerRegistration);
@@ -147,14 +147,14 @@ public abstract class ListItem extends ContentEditableBaseItem implements Editab
 		HandlerRegistration keyPressHandlerRegistration = addKeyPressHandler(new KeyPressHandler() {
 			@Override
 			public void onKeyPress(KeyPressEvent event) {
-				onKeyPressEvent(event);
+				//onKeyPressEvent(event);
 			}
 		});
 		handlerRegistrations.add(keyPressHandlerRegistration);
 		
 		HandlerRegistration keyUpHandlerRegistration = addKeyUpHandler(new KeyUpHandler() {
 			public void onKeyUp(KeyUpEvent event) {
-				onKeyUpEvent(event);
+				//onKeyUpEvent(event);
 			}
 		});
 		handlerRegistrations.add(keyUpHandlerRegistration);		
