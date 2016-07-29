@@ -423,7 +423,7 @@ public abstract class ListItem extends ContentEditableBaseItem implements Editab
 		(new Timer() {
 			@Override
 			public void run() {
-				selectionHandler();
+				//selectionHandler();
 			}
 		}).schedule(10);		
 	}
