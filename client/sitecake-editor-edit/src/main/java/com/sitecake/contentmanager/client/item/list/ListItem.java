@@ -403,8 +403,8 @@ public abstract class ListItem extends ContentEditableBaseItem implements Editab
 				public void execute() {
 					if (!getElement().hasChildNodes() ||
 							getElement().getFirstChild().getNodeType() == Node.TEXT_NODE) {
-						getElement().setInnerHTML("<li>&nbsp;</li>");
-						selection.setCursorInto(getElement().getFirstChild());
+						//getElement().setInnerHTML("<li>&nbsp;</li>");
+						//selection.setCursorInto(getElement().getFirstChild());
 					}
 					Node prev;
 					while ((prev = getElement().getPreviousSibling()) != null) {
