@@ -336,10 +336,10 @@ public abstract class ListItem extends ContentEditableBaseItem implements Editab
 				break;
 
 			case KeyCodes.KEY_BACKSPACE:
-				range = selection.getRange();
-				if ( (range != null && range.isCollapsed() && range.getTextBeforeStart().length() == 0)) {
-					sink = true;
-				}				
+				//range = selection.getRange();
+				//if ( (range != null && range.isCollapsed() && range.getTextBeforeStart().length() == 0)) {
+				sink = true;
+				//}				
 				break;
 				
 			case KeyCodes.KEY_DELETE:
@@ -351,7 +351,7 @@ public abstract class ListItem extends ContentEditableBaseItem implements Editab
 			if (prev.getNodeType() == Node.ELEMENT_NODE &&
 					"br".equalsIgnoreCase(Element.as(prev).getTagName()) &&
 					Element.as(prev).hasAttribute("_moz_dirty")) {
-					prev.getParentElement().removeChild(prev);
+					//prev.getParentElement().removeChild(prev);
 			} else {
 				break;
 			}
