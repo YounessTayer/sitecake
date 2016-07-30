@@ -58,6 +58,10 @@ class Pages {
             // Gather metadata for later update
             $metadata[$path] = $pageDetails;
 
+            // Get navigation property to copy it to new metadata
+            $metadata[$path]['navigation'] = isset($pagesMetadata[$path]['navigation']) ?
+                $pagesMetadata[$path]['navigation'] : false;
+
 			if(!isset($pageDetails['id']))
 			{
 				if(!isset($pageDetails['tid']))

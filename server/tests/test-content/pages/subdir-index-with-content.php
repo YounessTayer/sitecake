@@ -10,9 +10,6 @@
 </head>
 <body>
 <header>
-	<nav class="sc-nav">
-		<a class="active" href="/subdir">Subdir Page</a>
-	</nav>
 </header>
 <div class="sc-content-named">
 	<h1>Heading 1</h1>

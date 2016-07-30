@@ -1143,7 +1143,7 @@ class Site
             $this->_fs->update($draftPath, (string)$page);
 
             // Check for existing navigation in current page and store it if found
-            if($this->hasMenu($page))
+            if($hasNavigation = $this->hasMenu($page))
             {
                 $this->_findMenus($page, $path);
             }
@@ -1162,7 +1162,9 @@ class Site
                     // Set page title
                     'title' => (string)$page->getPageTitle(),
                     // Set page description
-                    'desc' => (string)$page->getPageDescription()
+                    'desc' => (string)$page->getPageDescription(),
+                    // Set weather page has navigation or not
+                    'navigation' => $hasNavigation
                 ];
             }
         }

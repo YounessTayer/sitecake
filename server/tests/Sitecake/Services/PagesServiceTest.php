@@ -35,6 +35,7 @@ class PagesServiceTest extends Services_WebTestCase
         $this->assertEquals('index.php', $pages[0]['url']);
         $this->assertEquals('Index Test', $pages[0]['title']);
         $this->assertEquals('Index Description', $pages[0]['desc']);
+        $this->assertTrue($pages[0]['navigation']);
         $this->assertEquals(-1, $pages[0]['idx']);
         $this->assertEmpty($pages[0]['navtitle']);
 
@@ -44,6 +45,7 @@ class PagesServiceTest extends Services_WebTestCase
         $this->assertEquals('subdir/index.php', $pages[1]['url']);
         $this->assertEquals('Subdir Test', $pages[1]['title']);
         $this->assertEquals('Subdir Description', $pages[1]['desc']);
+        $this->assertFalse($pages[1]['navigation']);
         $this->assertEquals(0, $pages[1]['idx']);
         $this->assertEquals('Subdir Page', $pages[1]['navtitle']);
     }
@@ -114,12 +116,14 @@ class PagesServiceTest extends Services_WebTestCase
         $this->assertNotEmpty($metadata['pages']);
 
         $pages = $metadata['pages'];
+
         $this->assertNotEmpty($pages['subdir/new-page.php']);
         $this->assertArrayHasKey('id', $pages['subdir/new-page.php']);
         $this->assertNotEmpty($pages['subdir/new-page.php']['id']);
         $this->assertEquals('subdir/new-page.php', $pages['subdir/new-page.php']['url']);
         $this->assertEquals('New Test', $pages['subdir/new-page.php']['title']);
         $this->assertEquals('New Description', $pages['subdir/new-page.php']['desc']);
+        $this->assertFalse($pages['subdir/new-page.php']['navigation']);
         $this->assertEquals(1, $pages['subdir/new-page.php']['idx']);
         $this->assertEquals('New Page', $pages['subdir/new-page.php']['navtitle']);
 
@@ -129,6 +133,7 @@ class PagesServiceTest extends Services_WebTestCase
         $this->assertEquals('index.php', $pages['index.php']['url']);
         $this->assertEquals('Index Test altered', $pages['index.php']['title']);
         $this->assertEquals('Index Description altered', $pages['index.php']['desc']);
+        $this->assertTrue($pages['index.php']['navigation']);
         $this->assertEquals(0, $pages['index.php']['idx']);
         $this->assertEquals('Index Page', $pages['index.php']['navtitle']);
 
@@ -138,26 +143,29 @@ class PagesServiceTest extends Services_WebTestCase
         $this->assertEquals('subdir/index.php', $pages['subdir/index.php']['url']);
         $this->assertEquals('Subdir Test altered', $pages['subdir/index.php']['title']);
         $this->assertEquals('Subdir Description altered', $pages['subdir/index.php']['desc']);
+        $this->assertFalse($pages['subdir/index.php']['navigation']);
         $this->assertEquals(-1, $pages['subdir/index.php']['idx']);
         $this->assertEmpty($pages['subdir/index.php']['navtitle']);
 
-        // Assert menu generation
         foreach($pages as $page => $details)
         {
-            phpQuery::newDocument($this->_fs->read($page));
-            $this->assertEquals(1, phpQuery::pq('.' . Menu::SC_MENU_BASE_CLASS)->count());
-
-            $menuItems = phpQuery::pq('.' . Menu::SC_MENU_BASE_CLASS . ' a');
-            $this->assertEquals(2, $menuItems->count());
-
-            $urls = [];
-            foreach($menuItems as $menuItem)
+            if($details['navigation'])
             {
-                $urls[] = $menuItem->getAttribute('href');
+                phpQuery::newDocument($this->_fs->read($page));
+                $this->assertEquals(1, phpQuery::pq('.' . Menu::SC_MENU_BASE_CLASS)->count());
+
+                $menuItems = phpQuery::pq('.' . Menu::SC_MENU_BASE_CLASS . ' a');
+                $this->assertEquals(2, $menuItems->count());
+
+                $urls = [];
+                foreach($menuItems as $menuItem)
+                {
+                    $urls[] = $menuItem->getAttribute('href');
+                }
+                $this->assertTrue(in_array('index.php', $urls));
+                $this->assertTrue(in_array('subdir/new-page.php', $urls));
+                $this->assertFalse(in_array('subdir/index.php', $urls));
             }
-            $this->assertTrue(in_array('index.php', $urls));
-            $this->assertTrue(in_array('subdir/new-page.php', $urls));
-            $this->assertFalse(in_array('subdir/index.php', $urls));
         }
 
         // Assert resources duplication for unnamed container
